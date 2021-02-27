@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="level_name">
+        <item>Наши любимые животные</item>
+        <item>Откуда этот кадр?</item>
+        <item>Чей же этот флаг?!</item>
+        <item>Test</item>
+        <item>Test</item>
+    </string-array>
+
+</resources>
