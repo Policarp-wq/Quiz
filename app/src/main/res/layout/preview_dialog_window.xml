@@ -30,32 +30,7 @@
             android:textSize="20sp"
             android:textColor="@color/golden">
         </TextView>
-        <Button
-            android:id="@+id/yes"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/dialog_txt"
-            android:layout_below="@id/dialog_txt"
-            android:layout_marginTop="15dp"
 
-            android:text="YES"
-            android:background="@drawable/custom_button"
-            android:textColor="@color/purple_700"
-            android:layout_marginLeft="10dp">
-        </Button>
-        <Button
-            android:id="@+id/no"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/dialog_txt"
-            android:layout_below="@id/dialog_txt"
-            android:layout_marginTop="15dp"
-
-            android:text="NO"
-            android:background="@drawable/custom_button"
-            android:textColor="@color/purple_700"
-            android:layout_marginRight="10dp">
-        </Button>
 
 
     </RelativeLayout>
