@@ -15,7 +15,7 @@ import android.widget.ListView;
 public class MainActivity extends AppCompatActivity {
 
     private Button start_btn;
-    public static int coin_count = 3; //Кол-во монет
+    public static int coin_count = 100; //Кол-во монет
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

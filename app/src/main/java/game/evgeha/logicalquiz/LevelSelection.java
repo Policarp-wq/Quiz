@@ -36,7 +36,7 @@ public class LevelSelection extends AppCompatActivity {
         cnt = (TextView)findViewById(R.id.coin_cnt);
         cnt.setText(Integer.toString(coin_count)); //Отображаем кол-во монет
         lvl_types = (ListView)findViewById(R.id.level_types);
-        LevelInfo_adapter adapter = new LevelInfo_adapter(this, makeLevel()); //Создаём listView классов Level с помощью адаптера
+        LevelInfo_adapter adapter = new LevelInfo_adapter(this, makeLevel()); //Создаём listView классов LevelInfo с помощью адаптера
         lvl_types.setAdapter(adapter);
         lvl_types.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
