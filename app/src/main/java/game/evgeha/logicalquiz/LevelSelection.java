@@ -28,7 +28,7 @@ public class LevelSelection extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_level_types);
+        setContentView(R.layout.activity_level_selection);
         //Убираем херню сверху
         Window window = getWindow();
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -80,10 +80,10 @@ public class LevelSelection extends AppCompatActivity {
                 }
                 //Если у нас уровень открыт
                 else {
-                 /*  Intent intent = new Intent(LevelSelection.this, QuizLevel.class);
+                    Intent intent = new Intent(LevelSelection.this, CommonLevel.class);
                     intent.putExtra("Level type", position);
                     //Переходим в сам уровень
-                    startActivity(intent);*/
+                    startActivity(intent);
                 }
             }
         });

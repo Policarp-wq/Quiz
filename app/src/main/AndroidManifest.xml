@@ -9,6 +9,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.LogicalQuiz">
+        <activity android:name=".CommonLevel"></activity>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
