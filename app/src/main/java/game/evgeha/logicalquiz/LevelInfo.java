@@ -1,12 +1,12 @@
 package game.evgeha.logicalquiz;
 
-public class Level {
+public class LevelInfo {
 
     private String name = ""; //Название уровня
     private int cost = 0; //Стоимость уровня
     private Boolean locked = true; //Состояние уровня(закрыт/открыт)
 
-    public Level(String name, int cost, boolean locked){
+    public LevelInfo(String name, int cost, boolean locked){
         this.name = name;
         this.cost = cost;
         this.locked = locked;

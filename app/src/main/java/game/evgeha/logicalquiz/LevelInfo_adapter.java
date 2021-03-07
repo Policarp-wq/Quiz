@@ -11,15 +11,15 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
-public class Level_adapter extends ArrayAdapter<Level> {
+public class LevelInfo_adapter extends ArrayAdapter<LevelInfo> {
 
-    public Level_adapter(Context context, Level[] arr) {
+    public LevelInfo_adapter(Context context, LevelInfo[] arr) {
         super(context, R.layout.list_item, arr);
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        final Level level = getItem(position);
+        final LevelInfo level = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, null);

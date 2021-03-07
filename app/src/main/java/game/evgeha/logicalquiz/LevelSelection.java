@@ -32,11 +32,11 @@ public class LevelSelection extends AppCompatActivity {
         setContentView(R.layout.activity_level_types);
         //Убираем херню сверху
         Window window = getWindow();
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         cnt = (TextView)findViewById(R.id.coin_cnt);
         cnt.setText(Integer.toString(coin_count)); //Отображаем кол-во монет
         lvl_types = (ListView)findViewById(R.id.level_types);
-        Level_adapter adapter = new Level_adapter(this, makeLevel()); //Создаём listView классов Level с помощью адаптера
+        LevelInfo_adapter adapter = new LevelInfo_adapter(this, makeLevel()); //Создаём listView классов Level с помощью адаптера
         lvl_types.setAdapter(adapter);
         lvl_types.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -87,11 +87,11 @@ public class LevelSelection extends AppCompatActivity {
 
 
     //Наполнение listView с помощью адаптера
-    Level[] makeLevel(){
-        Level[] arr = new Level[5];
+    LevelInfo[] makeLevel(){
+        LevelInfo[] arr = new LevelInfo[5];
         String[] name = getResources().getStringArray(R.array.level_name);
         for(int i = 0; i < arr.length; i++){
-            Level level = new Level(name[i], cost[i], locked[i]);
+            LevelInfo level = new LevelInfo(name[i], cost[i], locked[i]);
             arr[i] = level;
         }
         return arr;
