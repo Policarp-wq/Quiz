@@ -9,8 +9,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.LogicalQuiz">
-        <activity android:name=".QuizLevel"></activity>
-        <activity android:name=".Difficulty" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
@@ -20,7 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LevelTypes" />
+        <activity android:name=".LevelSelection" />
     </application>
 
 </manifest>

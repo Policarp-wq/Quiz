@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import static game.evgeha.logicalquiz.MainActivity.coin_count;
 
-public class LevelTypes extends AppCompatActivity {
+public class LevelSelection extends AppCompatActivity {
 
     Dialog dialog;
 
@@ -44,7 +44,7 @@ public class LevelTypes extends AppCompatActivity {
                 //Если у нас уровень закрыт, но денег хватает
                 if(locked[position] == true && cost[position] <= coin_count){
                     //Диалоговое окно
-                    dialog = new Dialog(LevelTypes.this);
+                  /*  dialog = new Dialog(LevelSelection.this);
                     dialog.setContentView(R.layout.preview_dialog_window); // Что будет показывать диалоговое окно
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Сделаем задний фон прозрачным
                     dialog.setCancelable(false); // Окно можно закрыть только выбрав какой-лио вариант
@@ -61,7 +61,7 @@ public class LevelTypes extends AppCompatActivity {
                     btn_yes.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            LevelTypes.locked[position] = false;
+                            LevelSelection.locked[position] = false;
                             coin_count -= cost[position];
                             dialog.dismiss();
                             // Обновляем экран
@@ -69,17 +69,17 @@ public class LevelTypes extends AppCompatActivity {
                             startActivity(getIntent());
                         }
                     });
-                    dialog.show();
+                    dialog.show();*/
                 }
                 //Если у нас уровень закрыт, но денег не хватает
                 else if(locked[position] == true && cost[position] > coin_count) {
                 }
                 //Если у нас уровень открыт
                 else {
-                    Intent intent = new Intent(LevelTypes.this, QuizLevel.class);
+                 /*  Intent intent = new Intent(LevelSelection.this, QuizLevel.class);
                     intent.putExtra("Level type", position);
                     //Переходим в сам уровень
-                    startActivity(intent);
+                    startActivity(intent);*/
                 }
             }
         });
