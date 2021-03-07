@@ -23,8 +23,7 @@ public class LevelSelection extends AppCompatActivity {
 
     private ListView lvl_types;
     private TextView cnt;
-    final int[] cost = {1, 2, 3, 4, 5}; //Стоимости уровней
-    static boolean[] locked = {true, true, true, true, true}; //Состояние уровня(закрыт/открыт)
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,43 +35,48 @@ public class LevelSelection extends AppCompatActivity {
         cnt = (TextView)findViewById(R.id.coin_cnt);
         cnt.setText(Integer.toString(coin_count)); //Отображаем кол-во монет
         lvl_types = (ListView)findViewById(R.id.level_types);
-        LevelInfo_adapter adapter = new LevelInfo_adapter(this, makeLevel()); //Создаём listView классов LevelInfo с помощью адаптера
+
+       LevelInfo[] levelInf = makeLevel();
+
+        LevelInfo_adapter adapter = new LevelInfo_adapter(this, levelInf); //Создаём listView классов LevelInfo с помощью адаптера
         lvl_types.setAdapter(adapter);
         lvl_types.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
                 //Если у нас уровень закрыт, но денег хватает
-                if(locked[position] == true && cost[position] <= coin_count){
+                if(levelInf[position].isLocked() && levelInf[position].getCost() <= coin_count){
                     //Диалоговое окно
-                  /*  dialog = new Dialog(LevelSelection.this);
+                    dialog = new Dialog(LevelSelection.this);
                     dialog.setContentView(R.layout.preview_dialog_window); // Что будет показывать диалоговое окно
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Сделаем задний фон прозрачным
                     dialog.setCancelable(false); // Окно можно закрыть только выбрав какой-лио вариант
                     Button btn_yes = (Button)dialog.findViewById(R.id.yes);
                     Button btn_no = (Button)dialog.findViewById(R.id.no);
-                    boolean accept;
-                    btn_no.setOnClickListener(new View.OnClickListener() {
+                    TextView question = (TextView)dialog.findViewById(R.id.ask);
+                    question.setText(getString(R.string.Warn) + " " + levelInf[position].getCost() + " монет?");
+                    btn_no.setOnClickListener(new View.OnClickListener() { // Нажатие на кнопку отказа
                         @Override
                         public void onClick(View v) {
                             dialog.dismiss();
                         }
                     });
 
-                    btn_yes.setOnClickListener(new View.OnClickListener() {
+                    btn_yes.setOnClickListener(new View.OnClickListener() { // Нажатие на кнопку соглашения
                         @Override
                         public void onClick(View v) {
-                            LevelSelection.locked[position] = false;
-                            coin_count -= cost[position];
+                            levelInf[position].setUnLocked();
+                            // Нужно менять состояние в самом ресурсном массиве!!!
+                            coin_count -= levelInf[position].getCost();
                             dialog.dismiss();
                             // Обновляем экран
                             finish();
                             startActivity(getIntent());
                         }
                     });
-                    dialog.show();*/
+                    dialog.show();
                 }
                 //Если у нас уровень закрыт, но денег не хватает
-                else if(locked[position] == true && cost[position] > coin_count) {
+                else if(levelInf[position].isLocked() == true && levelInf[position].getCost() > coin_count) {
                 }
                 //Если у нас уровень открыт
                 else {
@@ -89,9 +93,13 @@ public class LevelSelection extends AppCompatActivity {
     //Наполнение listView с помощью адаптера
     LevelInfo[] makeLevel(){
         LevelInfo[] arr = new LevelInfo[5];
+
         String[] name = getResources().getStringArray(R.array.level_name);
+        int[] cost = getResources().getIntArray(R.array.сosts); //Стоимости уровней
+        int[] locked = getResources().getIntArray(R.array.locked_statuses);
+
         for(int i = 0; i < arr.length; i++){
-            LevelInfo level = new LevelInfo(name[i], cost[i], locked[i]);
+            LevelInfo level = new LevelInfo(name[i], cost[i], locked[i] == 1);
             arr[i] = level;
         }
         return arr;
