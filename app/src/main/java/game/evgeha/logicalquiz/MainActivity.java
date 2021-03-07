@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(MainActivity.this, LevelTypes.class);
+                        Intent intent = new Intent(MainActivity.this, LevelSelection.class);
                         //Переходим в выбор уровня
                         startActivity(intent);
                     }
