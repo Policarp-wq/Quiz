@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="animals_questions">
+        <item>Какое животное называют кораблем пустыни?</item>
+        <item>Верблюд</item>
+        <item>Газель</item>
+        <item>Антилопа</item>
+        <item>Каракал</item>
+    </string-array>
+</resources>

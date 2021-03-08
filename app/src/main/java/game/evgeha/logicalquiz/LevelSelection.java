@@ -32,6 +32,7 @@ public class LevelSelection extends AppCompatActivity {
         //Убираем херню сверху
         Window window = getWindow();
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         cnt = (TextView)findViewById(R.id.coin_cnt);
         cnt.setText(Integer.toString(coin_count)); //Отображаем кол-во монет
         lvl_types = (ListView)findViewById(R.id.level_types);

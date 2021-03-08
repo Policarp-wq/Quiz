@@ -23,9 +23,10 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="Testing this shit"
-            android:textSize="40sp"
+            android:textSize="20sp"
             android:textColor="@color/golden"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+           >
         </TextView>
         <Button
             android:id="@+id/ans1"
