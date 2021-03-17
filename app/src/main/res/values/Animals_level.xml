@@ -1,10 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="animals_questions">
-        <item>Какое животное называют кораблем пустыни?</item>
+        <item>Животное, которое называют кораблем пустыни</item>
         <item>Верблюд</item>
         <item>Газель</item>
         <item>Антилопа</item>
         <item>Каракал</item>
+        <item>Крупная и опасная лесная кошка</item>
+        <item>Рысь</item>
+        <item>Каракал</item>
+        <item>Саванна</item>
+        <item>Леопард</item>
+        <item>Африканское животное с самыми большими в мире ушами</item>
+        <item>Слон</item>
+        <item>Большеухая лисица</item>
+        <item>Фенек</item>
+        <item>Саванный заяц</item>
+        <item>Чем питается кит?</item>
+        <item>Рачками</item>
+        <item>Водорослями</item>
+        <item>Дельфинами</item>
+        <item>Камнями</item>
+        <item>Грызун, живущий в степях и полупустынях</item>
+        <item>Суслик</item>
+        <item>Морская свинка</item>
+        <item>Шиншилла</item>
+        <item>Капибара</item>
+        <item>Млекопитающее, несущее яйца</item>
+        <item>Выдра</item>
+        <item>Броненосец</item>
+        <item>Тасманский дьявол</item>
+        <item>Выдра</item>
+        <item>Самое долгоживущая птица</item>
+        <item>Ворон</item>
+        <item>Мандаринка</item>
+        <item>Свиристель</item>
+        <item>Удод</item>
+        <item>Порода собак, обладающая синим языком</item>
+        <item>Чау-чау</item>
+        <item>Питбуль</item>
+        <item>Такса</item>
+        <item>Алабай</item>
+        <item>Кто строит дом под водой из воздуха?</item>
+        <item>Жук-серебрянка</item>
+        <item>Комар</item>
+        <item>Жук-плавунец</item>
+        <item>Водомерка</item>
+        <item>Расстояние, которое белый медведь может проплыть безостановочно</item>
+        <item>более 600 км</item>
+        <item>Менее километра</item>
+        <item>10 км</item>
+        <item>100 км</item>
     </string-array>
 </resources>
