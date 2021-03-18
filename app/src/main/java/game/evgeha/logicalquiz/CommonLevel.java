@@ -23,7 +23,7 @@ public class CommonLevel extends AppCompatActivity {
     private int numb = 0;
     private boolean rightAns = false;
 
-    private Handler handler;
+    private Handler handlerAns, handlerQuest_txt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class CommonLevel extends AppCompatActivity {
 
         String[] questions = getResources().getStringArray(R.array.animals_questions);
 
-        handler = new Handler(){
+        handlerAns = new Handler(){
             @Override
             public void handleMessage(@NonNull Message msg) {
                 String[] vars = (String[]) msg.obj;
@@ -52,6 +52,13 @@ public class CommonLevel extends AppCompatActivity {
             }
         };
 
+        handlerQuest_txt = new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                String txt = (String)msg.obj;
+                question_txt.setText(txt);
+            }
+        };
         // Моментально пролистывается!!
 
         new Thread(){
@@ -60,10 +67,17 @@ public class CommonLevel extends AppCompatActivity {
                 for (int i = 0; i < questions.length / 5; ++i) {
                     Log.d("Iteration", String.valueOf(i));
                     Question question = new Question(questions, i * 5);
-                   // question_txt.setText(question.getName());
+
+                    //Создаём сообщение хендлеру
                     Message msg = new Message();
-                    msg.obj = question.getVars();
-                    handler.sendMessage(msg);
+                    //Передаём в него текст вопроса
+                    msg.obj = question.getName();
+                    handlerQuest_txt.sendMessage(msg);
+
+                    //Передаём в него варианты ответов
+                    Message msg1 = new Message();
+                    msg1.obj = question.getVars();
+                    handlerAns.sendMessage(msg1);
 
                     vars = question.getVars();
 
@@ -72,11 +86,11 @@ public class CommonLevel extends AppCompatActivity {
                     ans3.setText(vars[2]);
                     ans4.setText(vars[3]);*/
 
-                    try {
+                   /* try {
                         this.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }
+                    }*/
 
                     /*View.OnClickListener onClickListener = new View.OnClickListener() {
                         @Override
