@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Когда вообще нахрен всё будет работать нормально?"
+            android:text="Ты не должен этого видеть"
             android:textSize="25sp"
             android:textColor="@color/golden"
             android:layout_margin="10dp"
