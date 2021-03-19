@@ -27,7 +27,6 @@ public class LevelSelection extends AppCompatActivity {
     private TextView cnt;
     private SharedPreferences spStatuses, spCnt;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +70,7 @@ public class LevelSelection extends AppCompatActivity {
             }
         });
     }
+
     // Получаем массив статусов уровней
     private boolean[] getStatuses(String[] keys){
         spStatuses = getSharedPreferences("Locked_status", Context.MODE_PRIVATE);
@@ -86,8 +86,7 @@ public class LevelSelection extends AppCompatActivity {
         return status;
     }
 
-
-    //Наполнение listView с помощью адаптера
+    // Наполнение listView с помощью адаптера
     private LevelInfo[] makeLevel(){
 
         String[] names = getResources().getStringArray(R.array.level_name);
@@ -102,7 +101,8 @@ public class LevelSelection extends AppCompatActivity {
         }
         return arr;
     }
-    //Диалоговое окно
+
+    // Диалоговое окно
     private void showDialog(LevelInfo levelInfo){
         dialog = new Dialog(LevelSelection.this);
         dialog.setContentView(R.layout.preview_dialog_window); // Что будет показывать диалоговое окно

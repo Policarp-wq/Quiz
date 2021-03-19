@@ -3,6 +3,9 @@ package game.evgeha.logicalquiz;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,7 +14,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import static game.evgeha.logicalquiz.MainActivity.coin_count;
 
 public class CommonLevel extends AppCompatActivity {
 
@@ -20,9 +26,12 @@ public class CommonLevel extends AppCompatActivity {
 
     private String[] vars = new String[4]; // Варианты ответов
 
-    private int numb = -1;
+    private int numb = -1, heartsCnt = 3;
+    private ImageView[] hearts = new ImageView[3];
 
-    private Handler handlerAns, handlerQuest_txt;
+    private SharedPreferences spCnt;
+
+    private Handler handlerAns, handlerQuest_txt, handlerHeart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +48,16 @@ public class CommonLevel extends AppCompatActivity {
         ans4 = (Button) findViewById(R.id.ans4);
         question_txt = (TextView) findViewById(R.id.question_txt);
 
+        hearts[0] = (ImageView)findViewById(R.id.heart1);
+        hearts[1] = (ImageView)findViewById(R.id.heart2);
+        hearts[2] = (ImageView)findViewById(R.id.heart3);
+
         // Получаем массив вопросов для данного уровня
         String[] questions = getResources().getStringArray(R.array.animals_questions);
+
+        Intent intent = new Intent(CommonLevel.this, LevelSelection.class);
+
+        spCnt = getSharedPreferences("Coins", Context.MODE_PRIVATE);
 
         listener();
 
@@ -65,11 +82,21 @@ public class CommonLevel extends AppCompatActivity {
             }
         };
 
+        // Изменяем сердечко
+        handlerHeart = new Handler(){
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                int id = (int)msg.obj;
+                hearts[id].setImageResource(R.drawable.empty_heart);
+            }
+        };
+
         // Создаём отдельный поток для движения по этапам
         new Thread(){
             @Override
             public void run() {
                 for(int i = 0; i < questions.length / 5; ++i) {
+                    // Создаём класс вопроса и берём варианты ответа из него
                     Question question = new Question(questions, i * 5);
                     vars = question.getVars();
 
@@ -92,16 +119,37 @@ public class CommonLevel extends AppCompatActivity {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-
                         // Если какая-то кнопка нажата, то получаем её порядковый номер и сравнимаем ответ, принадлежащий данной кнопке с правильным
                         if(numb != -1) {
-                            if(vars[numb] == question.getAns())
-                                break;
+                            // Если ответ неправильный
+                            if(vars[numb] != question.getAns()){
+                                heartsCnt--;
+                                Message msg2 = new Message();
+                                msg2.obj = heartsCnt;
+                                handlerHeart.sendMessage(msg2);
+                            }
+                            break;
                         }
                     }
+
+                    // Если все жизни потрачены, то преждевременно переходим в лобби
+                    if(heartsCnt == 0)
+                        startActivity(intent);
+
                 }
+                // Добавляем монеты пользователю
+                coin_count += questions.length / 5 - (3 - heartsCnt);
+
+                // Обновляем количество монет пользователя
+                SharedPreferences.Editor editorCnt = spCnt.edit();
+                editorCnt.putInt("Coins", coin_count);
+                editorCnt.commit();
+
+                // Переходим в лобби
+                startActivity(intent);
             }
         }.start();
+
     }
 
     // Слушатель кнопок

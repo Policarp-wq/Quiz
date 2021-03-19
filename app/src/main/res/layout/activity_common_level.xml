@@ -91,12 +91,5 @@
             android:layout_margin="10dp">
         </Button>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_below="@id/ans4"/>
-
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
