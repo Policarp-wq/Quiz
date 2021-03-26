@@ -18,21 +18,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import static game.evgeha.logicalquiz.MainActivity.coin_count;
+import static game.evgeha.logicalquiz.MainActivity.player;
 
 public class LevelSelection extends AppCompatActivity {
 
     Dialog dialog;
 
-    private ListView lvl_types;
-    private TextView cnt;
-    private SharedPreferences spStatuses, spCnt;
+    private ListView lvl_types; // Список уровней
+    private TextView cnt; // Отображение кол-ва монет
+    private SharedPreferences spStatuses, spCnt; // Кеш
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_selection);
 
-        //Убираем херню сверху
+        // Делаем полный экран
         Window window = getWindow();
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -41,9 +42,9 @@ public class LevelSelection extends AppCompatActivity {
         coin_count = spCnt.getInt("Coins", 100);
 
         cnt = (TextView)findViewById(R.id.coin_cnt);
-        cnt.setText(Integer.toString(coin_count)); //Отображаем кол-во монет
         lvl_types = (ListView)findViewById(R.id.level_types);
 
+        cnt.setText(Integer.toString(coin_count));
 
         LevelInfo[] levelInf = makeLevel(); // Создаём массив классов LevelInfo
 
@@ -53,12 +54,15 @@ public class LevelSelection extends AppCompatActivity {
         lvl_types.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
+                player.play(R.raw.click);
                 //Если у нас уровень закрыт, но денег хватает
-                if(levelInf[position].isLocked() && levelInf[position].getCost() <= coin_count){
+                if(levelInf[position].isLocked() && levelInf[position].getCost() <= coin_count)
+                    // Показываем диалоговое окно с подтверждением
                     showDialog(levelInf[position]);
-                }
+
                 //Если у нас уровень закрыт, но денег не хватает
                 else if(levelInf[position].isLocked() == true && levelInf[position].getCost() > coin_count) {
+                    // Показываем окно с отказом
                 }
                 //Если у нас уровень открыт
                 else {
@@ -75,12 +79,8 @@ public class LevelSelection extends AppCompatActivity {
     private boolean[] getStatuses(String[] keys){
         spStatuses = getSharedPreferences("Locked_status", Context.MODE_PRIVATE);
         boolean[] status = new boolean[keys.length];
-        for(int i = 0; i < keys.length; ++i){
-            /*
-            SharedPreferences.Editor editor = spStatuses.edit(); //Очищение
-            editor.putBoolean(keys[i], true);
-            editor.commit();*/
 
+        for(int i = 0; i < keys.length; ++i){
             status[i] = spStatuses.getBoolean(keys[i], true);
         }
         return status;
@@ -107,7 +107,7 @@ public class LevelSelection extends AppCompatActivity {
         dialog = new Dialog(LevelSelection.this);
         dialog.setContentView(R.layout.preview_dialog_window); // Что будет показывать диалоговое окно
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Сделаем задний фон прозрачным
-        dialog.setCancelable(false); // Окно можно закрыть только выбрав какой-лио вариант
+        dialog.setCancelable(false); // Окно можно закрыть только выбрав какой-либо вариант
 
         Button btn_yes = (Button)dialog.findViewById(R.id.yes);
         Button btn_no = (Button)dialog.findViewById(R.id.no);
@@ -118,6 +118,7 @@ public class LevelSelection extends AppCompatActivity {
         btn_no.setOnClickListener(new View.OnClickListener() { // Нажатие на кнопку отказа
             @Override
             public void onClick(View v) {
+                player.play(R.raw.click);
                 dialog.dismiss();
             }
         });
@@ -125,6 +126,7 @@ public class LevelSelection extends AppCompatActivity {
         btn_yes.setOnClickListener(new View.OnClickListener() { // Нажатие на кнопку соглашения
             @Override
             public void onClick(View v) {
+                player.play(R.raw.click);
                 //Открываем уровень
                 levelInfo.setUnLocked();
                 SharedPreferences.Editor editorStatuses = spStatuses.edit();
@@ -144,7 +146,5 @@ public class LevelSelection extends AppCompatActivity {
             }
         });
         dialog.show();
-
     }
-
 }

@@ -27,6 +27,4 @@ public class LevelInfo {
     public void setUnLocked() {
         locked = false;
     }
-
-    public void setCost(int cost){ this.cost = cost; }
 }

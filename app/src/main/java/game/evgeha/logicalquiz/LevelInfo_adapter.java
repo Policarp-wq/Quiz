@@ -21,18 +21,19 @@ public class LevelInfo_adapter extends ArrayAdapter<LevelInfo> {
 
         final LevelInfo level = getItem(position);
 
-        if (convertView == null) {
+        if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, null);
-        }
+
 
         ((TextView) convertView.findViewById(R.id.theme_txt)).setText(level.getName());
         ((TextView) convertView.findViewById(R.id.cost_txt)).setText("Требуется монет: " + Integer.toString(level.getCost()));
-        if(level.isLocked() == false)
-            ((TextView) convertView.findViewById(R.id.cost_txt)).setTextColor(ContextCompat.getColor(getContext(), R.color.green));
 
         if(level.isLocked() == true)
             ((ImageView) convertView.findViewById(R.id.status_image)).setImageResource(R.drawable.locked);
-        else ((ImageView) convertView.findViewById(R.id.status_image)).setImageResource(R.drawable.unlocked);
+        else {
+            ((TextView) convertView.findViewById(R.id.cost_txt)).setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+            ((ImageView) convertView.findViewById(R.id.status_image)).setImageResource(R.drawable.unlocked);
+        }
 
         return convertView;
     }

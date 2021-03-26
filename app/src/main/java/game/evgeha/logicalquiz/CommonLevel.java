@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import static game.evgeha.logicalquiz.MainActivity.coin_count;
+import static game.evgeha.logicalquiz.MainActivity.player;
 
 public class CommonLevel extends AppCompatActivity {
 
@@ -27,7 +28,7 @@ public class CommonLevel extends AppCompatActivity {
     private String[] vars = new String[4]; // Варианты ответов
 
     private int numb = -1, heartsCnt = 3;
-    private ImageView[] hearts = new ImageView[3];
+    private ImageView[] hearts = new ImageView[3]; // Сердечки на экране
 
     private SharedPreferences spCnt;
 
@@ -97,7 +98,7 @@ public class CommonLevel extends AppCompatActivity {
             public void run() {
                 for(int i = 0; i < questions.length / 5; ++i) {
                     // Создаём класс вопроса и берём варианты ответа из него
-                    Question question = new Question(questions, i * 5);
+                    Question question = new Question(questions, i * 5); // !!! Подаётся целый массив, хотя намнужна всего лишь часть - ОПТИМИЗИРОВАТЬ
                     vars = question.getVars();
 
                     //Создаём сообщение хендлеру
@@ -158,24 +159,28 @@ public class CommonLevel extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 numb = 0;
+                player.play(R.raw.click);
             }
         });
         ans2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 numb = 1;
+                player.play(R.raw.click);
             }
         });
         ans3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 numb = 2;
+                player.play(R.raw.click);
             }
         });
         ans4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 numb = 3;
+                player.play(R.raw.click);
             }
         });
 
