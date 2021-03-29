@@ -15,19 +15,27 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import static game.evgeha.logicalquiz.MainActivity.click_sound;
 import static game.evgeha.logicalquiz.MainActivity.coin_count;
 import static game.evgeha.logicalquiz.MainActivity.player;
+import static game.evgeha.logicalquiz.MainActivity.right_sound;
+import static game.evgeha.logicalquiz.MainActivity.soundPool;
+import static game.evgeha.logicalquiz.MainActivity.wrong_sound;
 
 public class CommonLevel extends AppCompatActivity {
 
     private Button ans1, ans2, ans3, ans4;
     private TextView question_txt;
+    private ProgressBar countDown_timer;
 
     private String[] vars = new String[4]; // Варианты ответов
 
-    private int numb = -1, heartsCnt = 3;
+    private int numb = -1, heartsCnt = 3, progress;
+    private final int TIME = 5;
+
     private ImageView[] hearts = new ImageView[3]; // Сердечки на экране
 
     private SharedPreferences spCnt;
@@ -52,6 +60,8 @@ public class CommonLevel extends AppCompatActivity {
         hearts[0] = (ImageView)findViewById(R.id.heart1);
         hearts[1] = (ImageView)findViewById(R.id.heart2);
         hearts[2] = (ImageView)findViewById(R.id.heart3);
+
+        countDown_timer = (ProgressBar)findViewById(R.id.timer);
 
         // Получаем массив вопросов для данного уровня
         String[] questions = getResources().getStringArray(R.array.animals_questions);
@@ -113,10 +123,13 @@ public class CommonLevel extends AppCompatActivity {
                     handlerAns.sendMessage(msg1);
                     numb = -1;
 
-                    // Ставим таймер на 15 секунд
-                    for(int j = 0; j < 60; ++j){
+                    // Ставим таймер на 5 секунд
+                    progress = 0;
+                    for(int j = 0; j < TIME * 1000; ++j){
+                        progress = j / (TIME * 10);
+                        updateProgressBar();
                         try {
-                            this.sleep(250);
+                            this.sleep(1);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -124,19 +137,18 @@ public class CommonLevel extends AppCompatActivity {
                         if(numb != -1) {
                             // Если ответ неправильный
                             if(vars[numb] != question.getAns()){
+                                soundPool.play(wrong_sound, 1, 1, 0, 0, 1);
                                 heartsCnt--;
                                 Message msg2 = new Message();
                                 msg2.obj = heartsCnt;
                                 handlerHeart.sendMessage(msg2);
-                            }
+                            } else soundPool.play(right_sound, 1, 1, 0, 0, 1);
                             break;
                         }
                     }
-
                     // Если все жизни потрачены, то преждевременно переходим в лобби
                     if(heartsCnt == 0)
                         startActivity(intent);
-
                 }
                 // Добавляем монеты пользователю
                 coin_count += questions.length / 5 - (3 - heartsCnt);
@@ -159,30 +171,34 @@ public class CommonLevel extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 numb = 0;
-                player.play(R.raw.click);
+                soundPool.play(click_sound,1,1,0,0,1);
             }
         });
         ans2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 numb = 1;
-                player.play(R.raw.click);
+                soundPool.play(click_sound,1,1,0,0,1);
             }
         });
         ans3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 numb = 2;
-                player.play(R.raw.click);
+                soundPool.play(click_sound,1,1,0,0,1);
             }
         });
         ans4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 numb = 3;
-                player.play(R.raw.click);
+                soundPool.play(click_sound,1,1,0,0,1);
             }
         });
+    }
 
+    // Обновление progressBar
+    private void updateProgressBar(){
+        countDown_timer.setProgress(progress);
     }
 }

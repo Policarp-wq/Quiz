@@ -17,8 +17,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import static game.evgeha.logicalquiz.MainActivity.click_sound;
 import static game.evgeha.logicalquiz.MainActivity.coin_count;
 import static game.evgeha.logicalquiz.MainActivity.player;
+import static game.evgeha.logicalquiz.MainActivity.soundPool;
+import static game.evgeha.logicalquiz.MainActivity.successful_sound;
 
 public class LevelSelection extends AppCompatActivity {
 
@@ -54,7 +57,7 @@ public class LevelSelection extends AppCompatActivity {
         lvl_types.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                player.play(R.raw.click);
+                soundPool.play(click_sound,1,1,0,0,1);
                 //Если у нас уровень закрыт, но денег хватает
                 if(levelInf[position].isLocked() && levelInf[position].getCost() <= coin_count)
                     // Показываем диалоговое окно с подтверждением
@@ -79,7 +82,7 @@ public class LevelSelection extends AppCompatActivity {
     private boolean[] getStatuses(String[] keys){
         spStatuses = getSharedPreferences("Locked_status", Context.MODE_PRIVATE);
         boolean[] status = new boolean[keys.length];
-
+        //clearStatuses(keys);
         for(int i = 0; i < keys.length; ++i){
             status[i] = spStatuses.getBoolean(keys[i], true);
         }
@@ -118,7 +121,7 @@ public class LevelSelection extends AppCompatActivity {
         btn_no.setOnClickListener(new View.OnClickListener() { // Нажатие на кнопку отказа
             @Override
             public void onClick(View v) {
-                player.play(R.raw.click);
+                soundPool.play(click_sound,1,1,0,0,1);
                 dialog.dismiss();
             }
         });
@@ -126,7 +129,7 @@ public class LevelSelection extends AppCompatActivity {
         btn_yes.setOnClickListener(new View.OnClickListener() { // Нажатие на кнопку соглашения
             @Override
             public void onClick(View v) {
-                player.play(R.raw.click);
+                soundPool.play(successful_sound,1,1,0,0,1);
                 //Открываем уровень
                 levelInfo.setUnLocked();
                 SharedPreferences.Editor editorStatuses = spStatuses.edit();
@@ -146,5 +149,13 @@ public class LevelSelection extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+
+    // Обнуление статусов
+    private void clearStatuses(String[] keys){
+        SharedPreferences.Editor editorStatuses = spStatuses.edit();
+        for(String key : keys)
+            editorStatuses.putBoolean(key, true);
+        editorStatuses.commit();
     }
 }
