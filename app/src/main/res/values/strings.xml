@@ -3,5 +3,9 @@
     <string name="start">Начать играть</string>
     <string name="name">Викторина на логику</string>
     <string name="Title">Выбор уровня</string>
-    <string name="Warn">Вы точно хотите потратить</string>
+    <string name="Confirm_txt">Вы точно хотите потратить</string>
+    <string name="Continue">Продолжить</string>
+    <string name="Return">Вернуться к выбору уровней</string>
+    <string name="Warn">У Вас недостаточно монет для открытия этого уровня! Для получения большего количества монет пройдите предыдущие уровни на лучший результат</string>
+    <string name="Common_level_description">На этом уровне Вам необходимо будет выбрать правильный вариант из предложенных. На это даётся 5 секунд</string>
 </resources>

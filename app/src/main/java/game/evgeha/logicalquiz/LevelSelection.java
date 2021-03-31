@@ -19,13 +19,12 @@ import android.widget.TextView;
 
 import static game.evgeha.logicalquiz.MainActivity.click_sound;
 import static game.evgeha.logicalquiz.MainActivity.coin_count;
-import static game.evgeha.logicalquiz.MainActivity.player;
 import static game.evgeha.logicalquiz.MainActivity.soundPool;
 import static game.evgeha.logicalquiz.MainActivity.successful_sound;
 
 public class LevelSelection extends AppCompatActivity {
 
-    Dialog dialog;
+    private Dialog dialog;
 
     private ListView lvl_types; // Список уровней
     private TextView cnt; // Отображение кол-ва монет
@@ -42,7 +41,7 @@ public class LevelSelection extends AppCompatActivity {
 
         //Получаем монеты пользователя
         spCnt = getSharedPreferences("Coins", Context.MODE_PRIVATE);
-        coin_count = spCnt.getInt("Coins", 100);
+        coin_count = spCnt.getInt("Coins", 0);
 
         cnt = (TextView)findViewById(R.id.coin_cnt);
         lvl_types = (ListView)findViewById(R.id.level_types);
@@ -57,22 +56,21 @@ public class LevelSelection extends AppCompatActivity {
         lvl_types.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                soundPool.play(click_sound,1,1,0,0,1);
+                playSound(click_sound);
                 //Если у нас уровень закрыт, но денег хватает
                 if(levelInf[position].isLocked() && levelInf[position].getCost() <= coin_count)
                     // Показываем диалоговое окно с подтверждением
-                    showDialog(levelInf[position]);
+                    showDialogConfirm(levelInf[position]);
 
                 //Если у нас уровень закрыт, но денег не хватает
                 else if(levelInf[position].isLocked() == true && levelInf[position].getCost() > coin_count) {
-                    // Показываем окно с отказом
+                    showDialogWarn();
                 }
                 //Если у нас уровень открыт
                 else {
                     Intent intent = new Intent(LevelSelection.this, CommonLevel.class);
-                    intent.putExtra("Level type", position);
-                    //Переходим в сам уровень
-                    startActivity(intent);
+                    intent.putExtra("position", position);
+                    showDialogDescription("Test", intent);
                 }
             }
         });
@@ -82,7 +80,7 @@ public class LevelSelection extends AppCompatActivity {
     private boolean[] getStatuses(String[] keys){
         spStatuses = getSharedPreferences("Locked_status", Context.MODE_PRIVATE);
         boolean[] status = new boolean[keys.length];
-        //clearStatuses(keys);
+        //clearCache(keys);
         for(int i = 0; i < keys.length; ++i){
             status[i] = spStatuses.getBoolean(keys[i], true);
         }
@@ -105,23 +103,25 @@ public class LevelSelection extends AppCompatActivity {
         return arr;
     }
 
-    // Диалоговое окно
-    private void showDialog(LevelInfo levelInfo){
+    private void playSound(int id){
+        soundPool.play(id,1,1,0,0,1);
+    }
+
+    // Диалоговое окно с подтвреждением
+    private void showDialogConfirm(LevelInfo levelInfo){
         dialog = new Dialog(LevelSelection.this);
-        dialog.setContentView(R.layout.preview_dialog_window); // Что будет показывать диалоговое окно
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Сделаем задний фон прозрачным
-        dialog.setCancelable(false); // Окно можно закрыть только выбрав какой-либо вариант
+        dialogSetUp(dialog, R.layout.dialog_window_confirm, false);
 
         Button btn_yes = (Button)dialog.findViewById(R.id.yes);
         Button btn_no = (Button)dialog.findViewById(R.id.no);
         TextView question = (TextView)dialog.findViewById(R.id.ask);
 
-        question.setText(getString(R.string.Warn) + " " + levelInfo.getCost() + " монет?");
+        question.setText(getString(R.string.Confirm_txt) + " " + levelInfo.getCost() + " монет?");
 
         btn_no.setOnClickListener(new View.OnClickListener() { // Нажатие на кнопку отказа
             @Override
             public void onClick(View v) {
-                soundPool.play(click_sound,1,1,0,0,1);
+                playSound(click_sound);
                 dialog.dismiss();
             }
         });
@@ -129,13 +129,13 @@ public class LevelSelection extends AppCompatActivity {
         btn_yes.setOnClickListener(new View.OnClickListener() { // Нажатие на кнопку соглашения
             @Override
             public void onClick(View v) {
-                soundPool.play(successful_sound,1,1,0,0,1);
+                playSound(click_sound);
+                playSound(successful_sound);
                 //Открываем уровень
                 levelInfo.setUnLocked();
                 SharedPreferences.Editor editorStatuses = spStatuses.edit();
                 editorStatuses.putBoolean(levelInfo.getName(), false);
                 editorStatuses.commit();
-
                 //Забираем монеты
                 SharedPreferences.Editor editorCnt = spCnt.edit();
                 coin_count -= levelInfo.getCost();
@@ -151,11 +151,51 @@ public class LevelSelection extends AppCompatActivity {
         dialog.show();
     }
 
-    // Обнуление статусов
-    private void clearStatuses(String[] keys){
+    // Диалоговое окно с описанием уровня
+    private void showDialogDescription(String type, Intent intent){
+        dialog = new Dialog(LevelSelection.this);
+        dialogSetUp(dialog, R.layout.dialog_window_about_common_level, true);
+        Button btn_start_level = (Button)dialog.findViewById(R.id.start_level);
+        btn_start_level.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playSound(click_sound);
+                dialog.dismiss();
+                startActivity(intent);
+            }
+        });
+        dialog.show();
+    }
+
+    private void showDialogWarn(){
+        dialog = new Dialog(LevelSelection.this);
+        dialogSetUp(dialog, R.layout.dialog_window_warn, true);
+        Button btn_start_level = (Button)dialog.findViewById(R.id.back);
+        btn_start_level.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playSound(click_sound);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    // SetUp диалогового окна
+    private void dialogSetUp(Dialog dialog, int id, boolean cancelable){
+        dialog.setContentView(id); // Что будет показывать диалоговое окно
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Сделаем задний фон прозрачным
+        dialog.setCancelable(cancelable); // Окно можно закрыть только выбрав какой-либо вариант
+    }
+
+    // Обнуление кеша
+    private void clearCache(String[] keys){
         SharedPreferences.Editor editorStatuses = spStatuses.edit();
         for(String key : keys)
             editorStatuses.putBoolean(key, true);
         editorStatuses.commit();
+        SharedPreferences.Editor editorCnt = spCnt.edit();
+        editorCnt.putInt("Coins", 0);
+        editorCnt.commit();
     }
 }

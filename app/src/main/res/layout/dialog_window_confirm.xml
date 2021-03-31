@@ -28,9 +28,10 @@
             android:id="@+id/ask"
             android:layout_below="@+id/coin_img"
             android:layout_centerHorizontal="true"
-            android:text="@string/Warn"
-            android:textSize="20sp"
-            android:layout_margin="10dp">
+            android:text="@string/Confirm_txt"
+            android:textSize="25sp"
+            android:layout_margin="10dp"
+            android:padding="10dp">
         </TextView>
         <Button
             android:layout_width="wrap_content"
@@ -40,7 +41,9 @@
             android:background="@drawable/custom_button"
             android:layout_below="@+id/ask"
             android:layout_alignLeft="@id/ask"
-            android:layout_margin="10dp">
+            android:textSize="20sp"
+            android:layout_margin="10dp"
+            android:padding="10dp">
         </Button>
         <Button
             android:layout_width="wrap_content"
@@ -50,7 +53,9 @@
             android:background="@drawable/custom_button"
             android:layout_below="@+id/ask"
             android:layout_alignRight="@id/ask"
-            android:layout_margin="10dp">
+            android:textSize="20sp"
+            android:layout_margin="10dp"
+            android:padding="10dp">
         </Button>
     </RelativeLayout>
 
