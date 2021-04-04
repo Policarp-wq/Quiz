@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="button">#5ea0eb</color>
     <color name="green">#4CAF50</color>
+    <color name="light_green">#76ff03</color>
     <color name="stroke_color">#17114d</color>
     <color name="golden">#FFEB3B</color>
     <color name="red">#FF0000</color>

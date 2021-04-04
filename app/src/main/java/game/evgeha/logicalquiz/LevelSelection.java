@@ -43,8 +43,8 @@ public class LevelSelection extends AppCompatActivity {
         spCnt = getSharedPreferences("Coins", Context.MODE_PRIVATE);
         coin_count = spCnt.getInt("Coins", 0);
 
-        cnt = (TextView)findViewById(R.id.coin_cnt);
-        lvl_types = (ListView)findViewById(R.id.level_types);
+        cnt = (TextView) findViewById(R.id.coin_cnt);
+        lvl_types = (ListView) findViewById(R.id.level_types);
 
         cnt.setText(Integer.toString(coin_count));
 
@@ -58,24 +58,24 @@ public class LevelSelection extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
                 playSound(click_sound);
                 //Если у нас уровень закрыт, но денег хватает
-                if(levelInf[position].isLocked() && levelInf[position].getCost() <= coin_count)
+                if (levelInf[position].isLocked() && levelInf[position].getCost() <= coin_count)
                     // Показываем диалоговое окно с подтверждением
                     showDialogConfirm(levelInf[position]);
 
-                //Если у нас уровень закрыт, но денег не хватает
-                else if(levelInf[position].isLocked() == true && levelInf[position].getCost() > coin_count) {
+                    //Если у нас уровень закрыт, но денег не хватает
+                else if (levelInf[position].isLocked() == true && levelInf[position].getCost() > coin_count) {
                     showDialogWarn();
                 }
                 //Если у нас уровень открыт
                 else {
                     Intent intent = new Intent(LevelSelection.this, CommonLevel.class);
-                    intent.putExtra("position", position);
-                    showDialogDescription("Test", intent);
+                    String type = levelInf[position].getType();
+                    intent.putExtra("TYPE", type);
+                    showDialogDescription(type, intent);
                 }
             }
         });
     }
-
     // Получаем массив статусов уровней
     private boolean[] getStatuses(String[] keys){
         spStatuses = getSharedPreferences("Locked_status", Context.MODE_PRIVATE);
@@ -91,13 +91,14 @@ public class LevelSelection extends AppCompatActivity {
     private LevelInfo[] makeLevel(){
 
         String[] names = getResources().getStringArray(R.array.level_name);
+        String[] types = getResources().getStringArray(R.array.level_types);
         boolean[] locked = getStatuses(names);
         int[] cost = getResources().getIntArray(R.array.сosts); //Стоимости уровней
 
         LevelInfo[] arr = new LevelInfo[names.length];
 
         for(int i = 0; i < arr.length; i++){
-            LevelInfo level = new LevelInfo(names[i], cost[i], locked[i]);
+            LevelInfo level = new LevelInfo(names[i], cost[i], locked[i], types[i]);
             arr[i] = level;
         }
         return arr;

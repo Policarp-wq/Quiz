@@ -3,9 +3,12 @@ package game.evgeha.logicalquiz;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -37,6 +40,7 @@ public class CommonLevel extends AppCompatActivity {
     private final int TIME = 5;
 
     private ImageView[] hearts = new ImageView[3]; // Сердечки на экране
+    private Dialog dialog;
 
     private SharedPreferences spCnt;
 
@@ -63,8 +67,12 @@ public class CommonLevel extends AppCompatActivity {
 
         countDown_timer = (ProgressBar)findViewById(R.id.timer);
 
-        // Получаем массив вопросов для данного уровня
+        // Получаем массив вопросов, фактов и картинок для данного уровня
         String[] questions = getResources().getStringArray(R.array.animals_questions);
+        String[] facts = getResources().getStringArray(R.array.animals_facts);
+        String[] png_codes = getResources().getStringArray(R.array.animals_ans);
+
+        showDialogFact("Рысь", facts[1], png_codes[1]);
 
         Intent intent = new Intent(CommonLevel.this, LevelSelection.class);
 
@@ -101,7 +109,6 @@ public class CommonLevel extends AppCompatActivity {
                 hearts[id].setImageResource(R.drawable.empty_heart);
             }
         };
-
         // Создаём отдельный поток для движения по этапам
         new Thread(){
             @Override
@@ -146,6 +153,7 @@ public class CommonLevel extends AppCompatActivity {
                             break;
                         }
                     }
+
                     // Если все жизни потрачены, то преждевременно переходим в лобби
                     if(heartsCnt == 0)
                         startActivity(intent);
@@ -201,4 +209,35 @@ public class CommonLevel extends AppCompatActivity {
     private void updateProgressBar(){
         countDown_timer.setProgress(progress);
     }
+
+    private void showDialogFact(String ans, String txt, String code){
+        dialog = new Dialog(CommonLevel.this);
+        dialogSetUp(dialog, R.layout.dialog_window_facts, true);
+
+        TextView fact_txt = (TextView)dialog.findViewById(R.id.fact_description);
+        TextView right_ans = (TextView)dialog.findViewById(R.id.right_ans);
+        ImageView fact_png = (ImageView)dialog.findViewById(R.id.fact_img);
+
+        right_ans.setText(ans);
+
+        int id = getResources().getIdentifier(code, "drawable", getPackageName());
+        fact_png.setImageResource(id);
+
+        Button btn_continue = (Button)dialog.findViewById(R.id.question_continue);
+        btn_continue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        fact_txt.setText(txt);
+        dialog.show();
+    }
+
+    private void dialogSetUp(Dialog dialog, int id, boolean cancelable){
+        dialog.setContentView(id); // Что будет показывать диалоговое окно
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Сделаем задний фон прозрачным
+        dialog.setCancelable(cancelable); // Окно можно закрыть только выбрав какой-либо вариант
+    }
+
 }
