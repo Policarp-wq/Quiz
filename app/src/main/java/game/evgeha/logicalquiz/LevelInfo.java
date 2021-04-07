@@ -27,7 +27,7 @@ public class LevelInfo {
         return locked;
     }
 
-    public void setUnLocked() {
+    public void setUnLocked(){
         locked = false;
     }
 

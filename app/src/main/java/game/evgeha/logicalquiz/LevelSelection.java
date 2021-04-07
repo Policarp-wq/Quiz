@@ -28,17 +28,13 @@ public class LevelSelection extends AppCompatActivity {
 
     private ListView lvl_types; // Список уровней
     private TextView cnt; // Отображение кол-ва монет
-    private SharedPreferences spStatuses, spCnt; // Кеш
+    public SharedPreferences spStatuses, spCnt; // Кеш
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_selection);
-
-        // Делаем полный экран
-        Window window = getWindow();
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        setFullScreen();
         //Получаем монеты пользователя
         spCnt = getSharedPreferences("Coins", Context.MODE_PRIVATE);
         coin_count = spCnt.getInt("Coins", 0);
@@ -70,11 +66,17 @@ public class LevelSelection extends AppCompatActivity {
                 else {
                     Intent intent = new Intent(LevelSelection.this, CommonLevel.class);
                     String type = levelInf[position].getType();
-                    intent.putExtra("TYPE", type);
+                    intent.putExtra("ID", position);
                     showDialogDescription(type, intent);
                 }
             }
         });
+    }
+
+    // Делаем полный экран
+    private void setFullScreen(){
+        Window window = getWindow();
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
     // Получаем массив статусов уровней
     private boolean[] getStatuses(String[] keys){

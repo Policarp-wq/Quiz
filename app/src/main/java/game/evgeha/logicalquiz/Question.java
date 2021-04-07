@@ -1,11 +1,11 @@
 package game.evgeha.logicalquiz;
 
 public class Question {
-    private String name, ans;
+    private String text, ans;
     private String[] vars = new String[4];
 
     public Question(String[] info, int id){
-        this.name = info[id];
+        this.text = info[id];
         String var1 = info[id + 1], var2 = info[id + 2], var3 = info[id + 3], var4 = info[id + 4];
         ans = var1;
         // Рандомизирование (Гениальное, согласен)
@@ -20,8 +20,8 @@ public class Question {
         return vars;
     }
 
-    public String getName() {
-        return name;
+    public String getText() {
+        return text;
     }
 
     public String getAns() {
