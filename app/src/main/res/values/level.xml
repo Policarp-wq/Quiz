@@ -14,5 +14,11 @@
         <item>SOUND</item>
         <item>COMMON</item>
     </string-array>
-
+    <string-array name="level_codes">
+        <item>animals_</item>
+        <item>test_</item>
+        <item>test_</item>
+        <item>test_</item>
+        <item>test_</item>
+    </string-array>
 </resources>

@@ -67,6 +67,7 @@ public class LevelSelection extends AppCompatActivity {
                     Intent intent = new Intent(LevelSelection.this, CommonLevel.class);
                     String type = levelInf[position].getType();
                     intent.putExtra("ID", position);
+                    intent.putExtra("CODE", levelInf[position].getCode());
                     showDialogDescription(type, intent);
                 }
             }
@@ -91,16 +92,15 @@ public class LevelSelection extends AppCompatActivity {
 
     // Наполнение listView с помощью адаптера
     private LevelInfo[] makeLevel(){
-
         String[] names = getResources().getStringArray(R.array.level_name);
         String[] types = getResources().getStringArray(R.array.level_types);
+        String[] codes = getResources().getStringArray(R.array.level_codes);
         boolean[] locked = getStatuses(names);
         int[] cost = getResources().getIntArray(R.array.сosts); //Стоимости уровней
 
         LevelInfo[] arr = new LevelInfo[names.length];
-
         for(int i = 0; i < arr.length; i++){
-            LevelInfo level = new LevelInfo(names[i], cost[i], locked[i], types[i]);
+            LevelInfo level = new LevelInfo(names[i], cost[i], locked[i], types[i], codes[i]);
             arr[i] = level;
         }
         return arr;
