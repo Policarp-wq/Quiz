@@ -50,8 +50,9 @@ public class CommonLevel extends Level {
                     Question question = new Question(questions, stage * 5); // !!! Подаётся целый массив, хотя нам нужна всего лишь часть - ОПТИМИЗИРОВАТЬ
                     String[] vars = question.getVars();
                     updateQuestionUi(question.getText(), vars);
+                    String fact = facts[stage], png_code = png_codes[stage];
                     btn_id = -1;
-                    // Ставим таймер на 5 секунд
+                    // Ставим таймер на 15 секунд
                     progress = 0;
                     for (; cur_time < TIME * 1000; ++cur_time) {
                         progress = cur_time / (TIME * 10);
@@ -71,13 +72,14 @@ public class CommonLevel extends Level {
                             break;
                         }
                     }
+                    updateQuestionUi(question.getText(), vars);
                     if(cur_time == TIME * 1000)
                         --heartsCnt;
-                    cur_time = 0;
-                    showDialogFact(question.getAns(), facts[stage], png_codes[stage]);
+                    showDialogFact(question.getAns(), fact, png_code);
+                    if (heartsCnt == 0) {
+                        stage = end - 1;
+                    }
                     // Если все жизни потрачены, то преждевременно переходим в лобби
-                    if (heartsCnt == 0)
-                        stage = end;
                 }
             }
         }.start();

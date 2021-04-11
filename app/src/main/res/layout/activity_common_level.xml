@@ -5,12 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CommonLevel">
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </ImageView>
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -53,8 +61,9 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="Ты не должен этого видеть"
+            android:background="@drawable/question_back"
             android:textSize="25sp"
-            android:textColor="@color/golden"
+            android:textColor="@color/black"
             android:layout_margin="10dp"
             android:gravity="center"
            >
@@ -67,7 +76,10 @@
             android:layout_alignLeft="@+id/question_txt"
             android:background="@drawable/custom_button"
             android:gravity="center"
-            android:textSize="15sp"
+            android:text="Test"
+            android:textSize="13sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/bals_sans"
             android:layout_margin="10dp"
             android:padding="10dp">
         </Button>
@@ -79,7 +91,9 @@
             android:layout_alignRight="@+id/question_txt"
             android:background="@drawable/custom_button"
             android:gravity="center"
-            android:textSize="15sp"
+            android:textSize="13sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/bals_sans"
             android:layout_margin="10dp"
             android:padding="10dp">
         </Button>
@@ -91,7 +105,9 @@
             android:layout_alignLeft="@+id/question_txt"
             android:background="@drawable/custom_button"
             android:gravity="center"
-            android:textSize="15sp"
+            android:textSize="13sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/bals_sans"
             android:layout_margin="10dp"
             android:padding="10dp">
         </Button>
@@ -102,8 +118,10 @@
             android:layout_below="@id/ans2"
             android:layout_alignRight="@+id/question_txt"
             android:background="@drawable/custom_button"
+            android:fontFamily="@font/bals_sans"
             android:gravity="center"
-            android:textSize="15sp"
+            android:textSize="13sp"
+            android:textColor="@color/white"
             android:layout_margin="10dp"
             android:padding="10dp">
         </Button>

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Что? Где? Когда?</string>
-    <string name="start">Начать играть</string>
+    <string name="start">Начать игру</string>
     <string name="name">Викторина на логику</string>
     <string name="Title">Выбор уровня</string>
     <string name="Confirm_txt">Вы точно хотите потратить</string>

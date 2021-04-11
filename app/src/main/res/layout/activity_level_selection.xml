@@ -29,9 +29,10 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            app:srcCompat="@drawable/logo" />
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            app:srcCompat="@drawable/logo"
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/title_txt"
@@ -40,8 +41,8 @@
             android:layout_centerInParent="true"
             android:layout_below="@+id/logo"
             android:layout_marginTop="10dp"
-            android:textSize="30sp"
-            android:textColor="#1565c0"
+            android:textSize="40sp"
+            android:textColor="@color/blue"
             android:text="@string/Title" />
 
         <ListView
@@ -49,7 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/title_txt"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            android:scrollbarThumbVertical="@drawable/question_back"/>
 
         <ImageView
             android:id="@+id/coin"

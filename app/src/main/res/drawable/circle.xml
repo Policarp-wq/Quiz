@@ -5,7 +5,8 @@
             android:shape="ring"
             android:thicknessRatio="16"
             android:useLevel="false">
-            <gradient android:startColor="@color/red" android:endColor="@color/golden"></gradient>
+            <gradient android:startColor="#009624" android:centerColor="@color/golden" android:endColor="@color/red"
+                android:angle="180"></gradient>
         </shape>
     </item>
     <item>
@@ -16,7 +17,7 @@
                 android:shape="ring"
                 android:thicknessRatio="16"
                 android:useLevel="true">
-                <solid android:color="#DDD"></solid>
+                <solid android:color="#fafafa"></solid>
             </shape>
     </rotate>
     </item>

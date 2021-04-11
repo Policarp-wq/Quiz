@@ -28,7 +28,7 @@ public class Level extends AppCompatActivity {
     public String[] questions, facts, png_codes;
 
     public int btn_id = -1, heartsCnt = 3, progress, pos, stage, end;
-    public final int TIME = 5; // Время на ответ
+    public final int TIME = 20; // Время на ответ
     public int cur_time = 0;
 
     public ImageView fact_png;
@@ -151,8 +151,9 @@ public class Level extends AppCompatActivity {
     }
     // Завершение уровня
     public void levelEnding(){
-        if(heartsCnt != 0)  // Если все жизни потрачены, то преждевременно переходим в лобби
+        if(heartsCnt != 0)  // Если все жизни потрачены, то не добавляем монеты
             addCoin();
         startActivity(intent);
+        finish();
     }
 }
