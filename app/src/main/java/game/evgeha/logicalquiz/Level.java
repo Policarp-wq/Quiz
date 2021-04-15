@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -14,14 +16,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import static game.evgeha.logicalquiz.MainActivity.click_sound;
-import static game.evgeha.logicalquiz.MainActivity.coin_count;
-import static game.evgeha.logicalquiz.MainActivity.soundPool;
+import java.io.IOException;
+
+import static game.evgeha.logicalquiz.Activity_Main.click_sound;
+import static game.evgeha.logicalquiz.Activity_Main.coin_count;
+import static game.evgeha.logicalquiz.Activity_Main.soundPool;
 
 public class Level extends AppCompatActivity {
 
-    public Button ans1, ans2, ans3, ans4, btn_continue; // Кнопки ответов, продолжить
-    public TextView question_txt, fact_txt, right_ans; // Текст вопроса, факта и правильного ответа на экране
+    public Button ans1, ans2, ans3, ans4, btn_continue, btn_end_continue, btn_end_play_again; // Кнопки ответов, продолжить
+    public TextView question_txt, fact_txt, right_ans, end_txt; // Текст вопроса, факта и правильного ответа на экране
     public ProgressBar countDown_timer; // Обратный отсчёт
 
     public String code = "animals_";
@@ -31,21 +35,25 @@ public class Level extends AppCompatActivity {
     public final int TIME = 20; // Время на ответ
     public int cur_time = 0;
 
-    public ImageView fact_png;
+    public ImageView fact_png, end_png;
     public ImageView[] hearts = new ImageView[3]; // Сердечки на экране
 
-    public Dialog dialog;
+    public Dialog dialogFact, dialogEnd; // Диалоговые окна
 
     public Intent intent;
 
     private SharedPreferences spCnt; // Кол-во монет пользователя
 
+    public void setFullScreen(){
+        Window window = getWindow();
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
     // Слушатель кнопок
     public void listener() {
         btn_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                dialogFact.dismiss();
                 cur_time = 0;
                 if(stage == end)
                     levelEnding();
@@ -55,36 +63,85 @@ public class Level extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 btn_id = 0;
-                soundPool.play(click_sound,1,1,0,0,1);
+                playSound(click_sound);
             }
         });
         ans2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btn_id = 1;
-                soundPool.play(click_sound,1,1,0,0,1);
+                playSound(click_sound);
             }
         });
         ans3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btn_id = 2;
-                soundPool.play(click_sound,1,1,0,0,1);
+                playSound(click_sound);
             }
         });
         ans4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btn_id = 3;
-                soundPool.play(click_sound,1,1,0,0,1);
+                playSound(click_sound);
             }
         });
+        btn_end_continue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intent);
+                playSound(click_sound);
+                finish();
+            }
+        });
+        btn_end_play_again.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(getIntent());
+            }
+        });
+    }
+    public void playSound(int sound_id){
+        soundPool.play(sound_id,1,1,0,0,1);
     }
     // Получаем массив вопросов, фактов и картинок для данного уровня
     public void getArrays(){
         questions = getResources().getStringArray(getResources().getIdentifier(code + "questions", "array", getPackageName()));
         facts =     getResources().getStringArray(getResources().getIdentifier(code + "facts", "array", getPackageName()));
         png_codes = getResources().getStringArray(getResources().getIdentifier(code + "ans_codes", "array", getPackageName()));
+    }
+    // Настройка уровня
+    public void levelMainSetUp(Context context){
+        ans1 = (Button) findViewById(R.id.ans1);
+        ans2 = (Button) findViewById(R.id.ans2);
+        ans3 = (Button) findViewById(R.id.ans3);
+        ans4 = (Button) findViewById(R.id.ans4);
+        question_txt = (TextView) findViewById(R.id.question_txt);
+
+        hearts[0] = (ImageView) findViewById(R.id.heart1);
+        hearts[1] = (ImageView) findViewById(R.id.heart2);
+        hearts[2] = (ImageView) findViewById(R.id.heart3);
+
+        pos = getIntent().getIntExtra("ID", 0) + 1;
+        code = getIntent().getStringExtra("CODE");
+
+        countDown_timer = (ProgressBar) findViewById(R.id.timer);
+
+        createDialogFact(context);
+        createDialogEnd(context);
+        listener();
+        try {
+            getArrays();
+            end = questions.length / 5;
+        }catch (Exception e){
+            createDialogEnd(context);
+            listener();
+            btn_end_play_again.setVisibility(View.INVISIBLE);
+            btn_end_continue.setText("Вернуться в лобби");
+            showDialogEnd("INVALID LEVEL CODE", R.drawable.cross);
+        }
     }
     // Обновить прогресс таймера на экране
     public void updateProgressBar(){
@@ -114,16 +171,16 @@ public class Level extends AppCompatActivity {
     }
     // Создание диалогового окна
     public void createDialogFact(Context context){
-        dialog = new Dialog(context);
-        dialogSetUp(dialog, R.layout.dialog_window_facts);
-        fact_txt = (TextView)dialog.findViewById(R.id.fact_description);
-        right_ans = (TextView)dialog.findViewById(R.id.right_ans);
-        fact_png = (ImageView)dialog.findViewById(R.id.fact_img);
-        btn_continue = (Button)dialog.findViewById(R.id.question_continue);
+        dialogFact = new Dialog(context);
+        dialogSetUp(dialogFact, R.layout.dialog_window_facts);
+        fact_txt = (TextView) dialogFact.findViewById(R.id.fact_description);
+        right_ans = (TextView) dialogFact.findViewById(R.id.right_ans);
+        fact_png = (ImageView) dialogFact.findViewById(R.id.fact_img);
+        btn_continue = (Button) dialogFact.findViewById(R.id.question_continue);
     }
     // Показ окна
-    public void showDialogFact(String ans, String txt, String code){
-        int id = getResources().getIdentifier(code, "drawable", getPackageName());
+    public void showDialogFact(String ans, String txt, String png_code){
+        int id = getResources().getIdentifier(png_code, "drawable", getPackageName());
         dialogUpdateUi(ans, txt, id);
         cur_time = -1000000;
     }
@@ -135,25 +192,51 @@ public class Level extends AppCompatActivity {
                 right_ans.setText(ans);
                 fact_txt.setText(txt);
                 fact_png.setImageResource(id);
-                dialog.show();
+                dialogFact.show();
             }
         };
         runOnUiThread(runnable);
     }
     // Добавить монеты
     public void addCoin(){
-        int length = questions.length;
         spCnt = getSharedPreferences("Coins", Context.MODE_PRIVATE);
-        coin_count += (length / 5 - (3 - heartsCnt)) * pos;
+        coin_count += (questions.length / 5 - (3 - heartsCnt)) * pos;
         SharedPreferences.Editor editorCnt = spCnt.edit();
         editorCnt.putInt("Coins", coin_count);
         editorCnt.commit();
     }
+    public void createDialogEnd(Context context){
+        dialogEnd = new Dialog(context);
+        dialogSetUp(dialogEnd, R.layout.dialog_window_level_end);
+        end_png = (ImageView)dialogEnd.findViewById(R.id.end_img);
+        end_txt = (TextView)dialogEnd.findViewById(R.id.end_txt);
+        btn_end_continue = (Button)dialogEnd.findViewById(R.id.end_continue) ;
+        btn_end_play_again = (Button)dialogEnd.findViewById(R.id.play_again);
+    }
+    public void showDialogEnd(String txt, int img_id){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                end_png.setImageResource(img_id);
+                end_txt.setText(txt);
+            }
+        };
+        runOnUiThread(runnable);
+        dialogEnd.show();
+    }
     // Завершение уровня
     public void levelEnding(){
-        if(heartsCnt != 0)  // Если все жизни потрачены, то не добавляем монеты
+        int id;
+        String txt;
+        if(heartsCnt != 0) { // Если все жизни потрачены, то не добавляем монеты
             addCoin();
-        startActivity(intent);
-        finish();
+            id = R.drawable.successful_level;
+            txt = getResources().getString(R.string.Succ_end) +" " + Integer.toString((questions.length / 5 - (3 - heartsCnt)) * pos) + " монет";
+        }
+        else{
+            id = R.drawable.cross;
+            txt = getResources().getString(R.string.UnSucc_end);
+        }
+        showDialogEnd(txt, id);
     }
 }

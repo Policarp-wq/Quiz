@@ -11,11 +11,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+public class Activity_Main extends AppCompatActivity {
 
     public static int click_sound, wrong_sound, right_sound, successful_sound;
     public static int coin_count; //Кол-во монет
-    public static SoundHandler player;
     public static SoundPool soundPool;
 
     private Button start_btn;
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         soundPool.play(click_sound, 1, 1, 0, 0, 1);
-                        Intent intent = new Intent(MainActivity.this, LevelSelection.class);
+                        Intent intent = new Intent(Activity_Main.this, Activity_LevelSelection.class);
                         //Переходим в выбор уровня
                         startActivity(intent);
                     }
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void setFullScreen(){
+    public void setFullScreen(){
         Window window = getWindow();
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }

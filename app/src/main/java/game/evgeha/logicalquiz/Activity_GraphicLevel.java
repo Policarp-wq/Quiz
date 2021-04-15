@@ -1,56 +1,44 @@
 package game.evgeha.logicalquiz;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import static game.evgeha.logicalquiz.MainActivity.right_sound;
-import static game.evgeha.logicalquiz.MainActivity.soundPool;
-import static game.evgeha.logicalquiz.MainActivity.wrong_sound;
+import static game.evgeha.logicalquiz.Activity_Main.right_sound;
+import static game.evgeha.logicalquiz.Activity_Main.wrong_sound;
 
-public class CommonLevel extends Level {
+public class Activity_GraphicLevel extends Level {
+
+    private ImageView question_img;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_common_level);
+        setContentView(R.layout.activity_graphic_level);
         setFullScreen();
-        intent = new Intent(CommonLevel.this, LevelSelection.class);
-        ans1 = (Button) findViewById(R.id.ans1);
-        ans2 = (Button) findViewById(R.id.ans2);
-        ans3 = (Button) findViewById(R.id.ans3);
-        ans4 = (Button) findViewById(R.id.ans4);
-        question_txt = (TextView) findViewById(R.id.question_txt);
-
-        hearts[0] = (ImageView) findViewById(R.id.heart1);
-        hearts[1] = (ImageView) findViewById(R.id.heart2);
-        hearts[2] = (ImageView) findViewById(R.id.heart3);
-
-        pos = getIntent().getIntExtra("ID", 0) + 1;
-        code = getIntent().getStringExtra("CODE");
-
-        countDown_timer = (ProgressBar) findViewById(R.id.timer);
-        // Получаем массив вопросов, фактов и картинок для данного уровня
-        getArrays();
-        createDialogFact(CommonLevel.this);
-        listener();
-
-        end = questions.length / 5;
+        intent = new Intent(Activity_GraphicLevel.this, Activity_LevelSelection.class);
+        // Предустановка базовых элементов уровня
+        question_img = (ImageView)findViewById(R.id.question_img);
+        levelMainSetUp(Activity_GraphicLevel.this);
         // Создаём отдельный поток для движения по вопросам
         new Thread() {
             @Override
             public void run() {
                 for (stage = 0; stage < end; ++stage) {
                     // Создаём класс вопроса и берём варианты ответа из него
-                    Question question = new Question(questions, stage * 5); // !!! Подаётся целый массив, хотя нам нужна всего лишь часть - ОПТИМИЗИРОВАТЬ
+                    int id = stage * 5;
+                    Question question = new Question(questions[id], questions[id + 1], questions[id + 2], questions[id + 3], questions[id + 4]);
                     String[] vars = question.getVars();
-                    updateQuestionUi(question.getText(), vars);
                     String fact = facts[stage], png_code = png_codes[stage];
+                    updateQuestionUi(question.getText(), vars, png_code);
                     btn_id = -1;
                     // Ставим таймер на 15 секунд
                     progress = 0;
@@ -66,13 +54,13 @@ public class CommonLevel extends Level {
                         if (btn_id != -1) {
                             // Если ответ неправильный
                             if (vars[btn_id] != question.getAns()) {
-                                soundPool.play(wrong_sound, 1, 1, 0, 0, 1);
+                                playSound(wrong_sound);
                                 heartsCnt--;
-                            } else soundPool.play(right_sound, 1, 1, 0, 0, 1);
+                            } else playSound(right_sound);
                             break;
                         }
                     }
-                    updateQuestionUi(question.getText(), vars);
+                    updateQuestionUi(question.getText(), vars, png_code);
                     if(cur_time == TIME * 1000)
                         --heartsCnt;
                     showDialogFact(question.getAns(), fact, png_code);
@@ -84,8 +72,21 @@ public class CommonLevel extends Level {
             }
         }.start();
     }
-    private void setFullScreen(){
-        Window window = getWindow();
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    public void updateQuestionUi(String question, String[] vars, String png_code){
+        int png_id = getResources().getIdentifier(png_code, "drawable", getPackageName());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                question_txt.setText(question);
+                ans1.setText(vars[0]);
+                ans2.setText(vars[1]);
+                ans3.setText(vars[2]);
+                ans4.setText(vars[3]);
+                if(heartsCnt < 3)
+                    hearts[heartsCnt].setImageResource(R.drawable.empty_heart);
+                question_img.setImageResource(png_id);
+            }
+        };
+        runOnUiThread(runnable);
     }
 }

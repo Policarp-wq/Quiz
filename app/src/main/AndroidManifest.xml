@@ -9,9 +9,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.LogicalQuiz">
-        <activity android:name=".CommonLevel"></activity>
+        <activity android:name=".Activity_GraphicLevel"></activity>
+        <activity android:name=".Activity_CommonLevel" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity_Main"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,10 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LevelSelection"
-            android:noHistory="true"/>
-        <activity android:name=".Level"
-            android:noHistory="true"></activity>
+        <activity
+            android:name=".Activity_LevelSelection"
+            android:noHistory="true" />
+        <activity
+            android:name=".Level"
+            android:noHistory="true" />
     </application>
 
 </manifest>

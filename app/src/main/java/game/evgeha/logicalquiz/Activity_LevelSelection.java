@@ -17,18 +17,18 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import static game.evgeha.logicalquiz.MainActivity.click_sound;
-import static game.evgeha.logicalquiz.MainActivity.coin_count;
-import static game.evgeha.logicalquiz.MainActivity.soundPool;
-import static game.evgeha.logicalquiz.MainActivity.successful_sound;
+import static game.evgeha.logicalquiz.Activity_Main.click_sound;
+import static game.evgeha.logicalquiz.Activity_Main.coin_count;
+import static game.evgeha.logicalquiz.Activity_Main.soundPool;
+import static game.evgeha.logicalquiz.Activity_Main.successful_sound;
 
-public class LevelSelection extends AppCompatActivity {
+public class Activity_LevelSelection extends AppCompatActivity {
 
     private Dialog dialog;
 
     private ListView lvl_types; // Список уровней
     private TextView cnt; // Отображение кол-ва монет
-    public SharedPreferences spStatuses, spCnt; // Кеш
+    private SharedPreferences spStatuses, spCnt; // Кеш
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,13 @@ public class LevelSelection extends AppCompatActivity {
                 }
                 //Если у нас уровень открыт
                 else {
-                    Intent intent = new Intent(LevelSelection.this, CommonLevel.class);
+                    Intent intent = new Intent();
+                    switch (levelInf[position].getType()){
+                        case LevelInfo.TYPE_GRAPHIC:
+                            intent = new Intent(Activity_LevelSelection.this, Activity_GraphicLevel.class);
+                            break;
+                        default: intent = new Intent(Activity_LevelSelection.this, Activity_CommonLevel.class);
+                    }
                     String type = levelInf[position].getType();
                     intent.putExtra("ID", position);
                     intent.putExtra("CODE", levelInf[position].getCode());
@@ -112,7 +118,7 @@ public class LevelSelection extends AppCompatActivity {
 
     // Диалоговое окно с подтвреждением
     private void showDialogConfirm(LevelInfo levelInfo){
-        dialog = new Dialog(LevelSelection.this);
+        dialog = new Dialog(Activity_LevelSelection.this);
         dialogSetUp(dialog, R.layout.dialog_window_confirm, false);
 
         Button btn_yes = (Button)dialog.findViewById(R.id.yes);
@@ -156,7 +162,7 @@ public class LevelSelection extends AppCompatActivity {
 
     // Диалоговое окно с описанием уровня
     private void showDialogDescription(String type, Intent intent){
-        dialog = new Dialog(LevelSelection.this);
+        dialog = new Dialog(Activity_LevelSelection.this);
         dialogSetUp(dialog, R.layout.dialog_window_about_common_level, true);
         Button btn_start_level = (Button)dialog.findViewById(R.id.start_level);
         btn_start_level.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +177,7 @@ public class LevelSelection extends AppCompatActivity {
     }
 
     private void showDialogWarn(){
-        dialog = new Dialog(LevelSelection.this);
+        dialog = new Dialog(Activity_LevelSelection.this);
         dialogSetUp(dialog, R.layout.dialog_window_warn, true);
         Button btn_start_level = (Button)dialog.findViewById(R.id.back);
         btn_start_level.setOnClickListener(new View.OnClickListener() {

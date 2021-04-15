@@ -4,9 +4,8 @@ public class Question {
     private String text, ans;
     private String[] vars = new String[4];
 
-    public Question(String[] info, int id){
-        this.text = info[id];
-        String var1 = info[id + 1], var2 = info[id + 2], var3 = info[id + 3], var4 = info[id + 4];
+    public Question(String text, String var1, String var2, String var3, String var4){
+        this.text = text;
         ans = var1;
         // Рандомизирование (Гениальное, согласен)
         int nmb = (int) (Math.random() * 4);

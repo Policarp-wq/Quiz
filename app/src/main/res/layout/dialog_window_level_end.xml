@@ -15,33 +15,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:id="@+id/question_card"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/cross"
+            android:id="@+id/end_img"
+            android:layout_width="400dp"
+            android:layout_height="200dp"
+            android:src="@drawable/successful_level"
             android:layout_centerHorizontal="true">
         </ImageView>
         <TextView
-            android:id="@+id/warn_txt"
+            android:id="@+id/end_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/question_card"
-            android:text="@string/Warn"
+            android:layout_below="@+id/end_img"
             android:textSize="25sp"
+            android:text="@string/Succ_end"
             android:layout_margin="10dp"
             android:padding="10dp"
             android:gravity="center">
         </TextView>
         <Button
-            android:id="@+id/back"
+            android:id="@+id/end_continue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/warn_txt"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/custom_button"
-            android:text="@string/Return"
-            android:textSize="20sp"
+            android:layout_below="@id/end_txt"
             android:fontFamily="@font/bals_sans"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/custom_button"
+            android:textSize="13sp"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:text="@string/Continue"></Button>
+        <Button
+            android:id="@+id/play_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/end_txt"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/bals_sans"
+            android:background="@drawable/custom_button"
+            android:text="@string/Play_again"
+            android:textSize="13sp"
             android:layout_margin="10dp"
             android:padding="10dp">
         </Button>

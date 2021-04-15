@@ -2,7 +2,7 @@ package game.evgeha.logicalquiz;
 
 public class LevelInfo {
 
-    public static final String TYPE1 = "COMMON", TYPE2 = "GRAPHIC", TYPE3 = "SOUND";
+    public static final String TYPE_COMMON = "COMMON", TYPE_GRAPHIC = "GRAPHIC", TYPE_SOUND = "SOUND";
 
     private String name = "", type, code; //Название уровня
     private int cost = 0; //Стоимость уровня

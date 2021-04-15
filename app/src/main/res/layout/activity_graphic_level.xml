@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_CommonLevel">
+    tools:context=".Activity_GraphicLevel">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,7 +29,7 @@
             android:id="@+id/timer"
             android:layout_width="50dp"
             android:layout_height="50dp"
-           android:layout_alignParentRight="true"
+            android:layout_alignParentRight="true"
             android:indeterminateOnly="false"
             android:progressDrawable="@drawable/circle"
             tools:progress="60">
@@ -65,14 +65,20 @@
             android:textSize="25sp"
             android:textColor="@color/black"
             android:layout_margin="10dp"
-            android:gravity="center"
-           >
+            android:gravity="center">
         </TextView>
+        <ImageView
+            android:id="@+id/question_img"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/question_txt"
+            android:src="@drawable/question_card"></ImageView>
         <Button
             android:id="@+id/ans1"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/question_txt"
+            android:layout_below="@+id/question_img"
             android:layout_alignLeft="@+id/question_txt"
             android:background="@drawable/custom_button"
             android:gravity="center"
@@ -87,7 +93,7 @@
             android:id="@+id/ans2"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/question_txt"
+            android:layout_below="@+id/question_img"
             android:layout_alignRight="@+id/question_txt"
             android:background="@drawable/custom_button"
             android:gravity="center"
