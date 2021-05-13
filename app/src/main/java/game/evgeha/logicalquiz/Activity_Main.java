@@ -2,7 +2,9 @@ package game.evgeha.logicalquiz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class Activity_Main extends AppCompatActivity {
 
@@ -18,6 +21,10 @@ public class Activity_Main extends AppCompatActivity {
     public static SoundPool soundPool;
 
     private Button start_btn;
+    private TextView right_cnt_txt, wrong_cnt_txt;
+    private int right_cnt, wrong_cnt;
+
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +32,19 @@ public class Activity_Main extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setFullScreen();
         start_btn = (Button)findViewById(R.id.start_button);
+        right_cnt_txt = (TextView)findViewById(R.id.right_cnt);
+        wrong_cnt_txt = (TextView)findViewById(R.id.wrong_cnt);
 
         setSoundPoolClick();
         setSounds();
+
+        sp = getSharedPreferences("Counts", Context.MODE_PRIVATE);
+        right_cnt = sp.getInt("Right_cnt", 0);
+        wrong_cnt = sp.getInt("Wrong_cnt", 0);
+        right_cnt_txt.setText(getString(R.string.Right_cnt) + ' ' + String.valueOf(right_cnt));
+        right_cnt_txt.setTextColor(getColor(R.color.green));
+        wrong_cnt_txt.setText(getString(R.string.Wrong_cnt) + ' ' + String.valueOf(wrong_cnt));
+        wrong_cnt_txt.setTextColor(getColor(R.color.red));
 
         start_btn.setOnClickListener(
                 new View.OnClickListener() {

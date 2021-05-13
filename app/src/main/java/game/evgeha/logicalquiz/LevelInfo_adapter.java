@@ -19,19 +19,19 @@ public class LevelInfo_adapter extends ArrayAdapter<LevelInfo> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        final LevelInfo level = getItem(position);
+        final LevelInfo levelInfo = getItem(position);
 
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, null);
 
+        ((TextView) convertView.findViewById(R.id.theme_txt)).setText(levelInfo.getName());
+        ((TextView) convertView.findViewById(R.id.cost_txt)).setText("Требуется монет: " + Integer.toString(levelInfo.getCost()));
 
-        ((TextView) convertView.findViewById(R.id.theme_txt)).setText(level.getName());
-        ((TextView) convertView.findViewById(R.id.cost_txt)).setText("Требуется монет: " + Integer.toString(level.getCost()));
-
-        if(level.isLocked() == true)
+        if(levelInfo.isLocked() == true)
             ((ImageView) convertView.findViewById(R.id.status_image)).setImageResource(R.drawable.locked);
         else {
             ((TextView) convertView.findViewById(R.id.cost_txt)).setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+
             ((ImageView) convertView.findViewById(R.id.status_image)).setImageResource(R.drawable.unlocked);
         }
 

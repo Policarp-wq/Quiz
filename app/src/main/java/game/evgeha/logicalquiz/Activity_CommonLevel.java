@@ -45,7 +45,10 @@ public class Activity_CommonLevel extends Level {
                             if (vars[btn_id] != question.getAns()) {
                                 playSound(wrong_sound);
                                 heartsCnt--;
-                            } else playSound(right_sound);
+                            } else{
+                                ++right_ans_cnt;
+                                playSound(right_sound);
+                            }
                             break;
                         }
                     }

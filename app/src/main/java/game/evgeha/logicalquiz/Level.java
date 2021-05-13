@@ -16,8 +16,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.IOException;
-
 import static game.evgeha.logicalquiz.Activity_Main.click_sound;
 import static game.evgeha.logicalquiz.Activity_Main.coin_count;
 import static game.evgeha.logicalquiz.Activity_Main.soundPool;
@@ -28,10 +26,10 @@ public class Level extends AppCompatActivity {
     public TextView question_txt, fact_txt, right_ans, end_txt; // Текст вопроса, факта и правильного ответа на экране
     public ProgressBar countDown_timer; // Обратный отсчёт
 
-    public String code = "animals_";
+    public String code = "animals_", name;
     public String[] questions, facts, png_codes;
 
-    public int btn_id = -1, heartsCnt = 3, progress, pos, stage, end;
+    public int btn_id = -1, heartsCnt = 3, progress, pos, stage, end, right_ans_cnt = 0, record;
     public final int TIME = 20; // Время на ответ
     public int cur_time = 0;
 
@@ -42,7 +40,7 @@ public class Level extends AppCompatActivity {
 
     public Intent intent;
 
-    private SharedPreferences spCnt; // Кол-во монет пользователя
+    private SharedPreferences spCnts, spRecords; // Кол-во монет пользователя
 
     public void setFullScreen(){
         Window window = getWindow();
@@ -125,9 +123,15 @@ public class Level extends AppCompatActivity {
         hearts[2] = (ImageView) findViewById(R.id.heart3);
 
         pos = getIntent().getIntExtra("ID", 0) + 1;
-        code = getIntent().getStringExtra("CODE");
+
+        LevelInfo levelInfo = getIntent().getParcelableExtra("levelInfo");
+        code = levelInfo.getCode();
+        record = levelInfo.getRecord();
+        name = levelInfo.getName();
 
         countDown_timer = (ProgressBar) findViewById(R.id.timer);
+
+        //record = spRecords.getInt("")
 
         createDialogFact(context);
         createDialogEnd(context);
@@ -198,10 +202,10 @@ public class Level extends AppCompatActivity {
         runOnUiThread(runnable);
     }
     // Добавить монеты
-    public void addCoin(){
-        spCnt = getSharedPreferences("Coins", Context.MODE_PRIVATE);
-        coin_count += (questions.length / 5 - (3 - heartsCnt)) * pos;
-        SharedPreferences.Editor editorCnt = spCnt.edit();
+    public void addCoin(int coins){
+        spCnts = getSharedPreferences("Counts", Context.MODE_PRIVATE);
+        coin_count += coins;
+        SharedPreferences.Editor editorCnt = spCnts.edit();
         editorCnt.putInt("Coins", coin_count);
         editorCnt.commit();
     }
@@ -226,17 +230,42 @@ public class Level extends AppCompatActivity {
     }
     // Завершение уровня
     public void levelEnding(){
-        int id;
+        int id, right_cnt, wrong_cnt;
         String txt;
         if(heartsCnt != 0) { // Если все жизни потрачены, то не добавляем монеты
-            addCoin();
+            int coins = (questions.length / 5 - (3 - heartsCnt)) * pos;
             id = R.drawable.successful_level;
-            txt = getResources().getString(R.string.Succ_end) +" " + Integer.toString((questions.length / 5 - (3 - heartsCnt)) * pos) + " монет";
+            if(record == 0) {
+                txt = getResources().getString(R.string.Succ_end) + " " + Integer.toString(coins) + " " + getResources().getString(R.string.Money);
+                record = coins;
+            }
+            else if(record >= coins) {
+                coins = 0;
+                txt = getResources().getString(R.string.Old_record) + " " + Integer.toString(record) + " " + getResources().getString(R.string.Money);
+            }
+            else{
+                int copy = coins;
+                coins -= record;
+                record = copy;
+                txt = getResources().getString(R.string.New_record) + " " + Integer.toString(coins) + " " + getResources().getString(R.string.Money);
+            }
+            addCoin(coins);
+            spRecords = getSharedPreferences("Records", Context.MODE_PRIVATE);
+            SharedPreferences.Editor edRecord =  spRecords.edit();
+            edRecord.putInt(name, record);
+            edRecord.commit();
         }
         else{
             id = R.drawable.cross;
             txt = getResources().getString(R.string.UnSucc_end);
         }
+        spCnts = getSharedPreferences("Counts", Context.MODE_PRIVATE);
+        right_cnt = spCnts.getInt("Right_cnt", 0) + right_ans_cnt;
+        wrong_cnt = spCnts.getInt("Wrong_cnt", 0) + 3 - heartsCnt;
+        SharedPreferences.Editor ed = spCnts.edit();
+        ed.putInt("Right_cnt", right_cnt);
+        ed.putInt("Wrong_cnt", wrong_cnt);
+        ed.commit();
         showDialogEnd(txt, id);
     }
 }
