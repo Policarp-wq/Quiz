@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 public class Activity_Main extends AppCompatActivity {
 
-    public static int click_sound, wrong_sound, right_sound, successful_sound;
+    public static int click_sound, wrong_sound, right_sound, successful_sound, pop_sound;
     public static int coin_count; //Кол-во монет
     public static SoundPool soundPool;
 
@@ -80,6 +80,7 @@ public class Activity_Main extends AppCompatActivity {
         right_sound = soundPool.load(this, R.raw.right_sound, 0);
         wrong_sound = soundPool.load(this, R.raw.wrong_sound, 0);
         successful_sound = soundPool.load(this, R.raw.successful_sound, 0);
+        pop_sound = soundPool.load(this, R.raw.pop_sound, 0);
     }
 
 }

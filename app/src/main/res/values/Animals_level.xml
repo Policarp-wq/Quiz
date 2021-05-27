@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="animals_name">Наши любимые животные</string>
+    <string name="animals_type">COMMON</string>
     <string-array name="animals_questions">
         <item>Животное, которое называют кораблем пустыни</item>
         <item>Верблюд</item>
@@ -64,7 +66,7 @@
         <item>Улитки могут на своем панцире переносить груз, который до 10 раз больше веса самой улитки, кроме того она в прямом смысле может «ходить по лезвию ножа» и не пораниться. Все потому, что она выделяет специальную слизь, которая и защищает ее от повреждений.</item>
         <item>Как известно, белые медведи на протяжении своей жизни плавают от дрейфующих к припайным льдам в поисках добычи и мест отдыха. Но поскольку из-за повышения температуры морской лед стремительно тает, белым медведям приходится преодолевать все большие расстояния, рискуя здоровьем и жизнью своих детенышей, теряя при этом до 20% своего веса.</item>
     </string-array>
-  <string-array name="animals_ans_codes">
+    <string-array name="animals_ans_codes">
       <item>camel</item>
       <item>lynx</item>
       <item>elephant</item>
@@ -76,4 +78,16 @@
       <item>snail</item>
       <item>bear</item>
   </string-array>
+    <string-array name="animals_hints">
+        <item>Among</item>
+        <item>null</item>
+        <item>null</item>
+        <item>Sus</item>
+        <item>null</item>
+        <item>null</item>
+        <item>null</item>
+        <item>null</item>
+        <item>null</item>
+        <item>null</item>
+    </string-array>
 </resources>

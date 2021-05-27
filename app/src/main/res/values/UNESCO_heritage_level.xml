@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="heritage_name">Удивительные объекты всемирного наследия ЮНЕСКО</string>
+    <string name="heritage_type">GRAPHIC</string>
     <string-array name="heritage_questions">
         <item>Как называется сооружение, изображённое на фотографии?</item>
         <item>Мачу-Пикчу</item>
@@ -75,5 +77,17 @@
         <item>petra</item>
         <item>tical</item>
         <item>borobodur</item>
+    </string-array>
+    <string-array name="heritage_hints">
+        <item>Among</item>
+        <item>null</item>
+        <item>null</item>
+        <item>Sus</item>
+        <item>null</item>
+        <item>null</item>
+        <item>null</item>
+        <item>null</item>
+        <item>null</item>
+        <item>null</item>
     </string-array>
 </resources>

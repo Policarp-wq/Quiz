@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import static game.evgeha.logicalquiz.Activity_Main.coin_count;
 import static game.evgeha.logicalquiz.Activity_Main.right_sound;
 import static game.evgeha.logicalquiz.Activity_Main.wrong_sound;
 
@@ -40,6 +41,9 @@ public class Activity_GraphicLevel extends Level {
                     String fact = facts[stage], png_code = png_codes[stage];
                     updateQuestionUi(question.getText(), vars, png_code);
                     btn_id = -1;
+                    if(hints[stage].equals("null") || coin_count - penalty < hint_cost) {
+                        disableHint();
+                    } else enableHint();
                     // Ставим таймер на 15 секунд
                     progress = 0;
                     for (; cur_time < TIME * 1000; ++cur_time) {

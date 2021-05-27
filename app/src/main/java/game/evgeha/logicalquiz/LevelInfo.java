@@ -1,5 +1,7 @@
 package game.evgeha.logicalquiz;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -38,7 +40,9 @@ public class LevelInfo implements Parcelable {
         return locked;
     }
 
-    public void setUnLocked(){
+    public void setUnLocked(SharedPreferences.Editor editor){
+        editor.putBoolean(getName(), false);
+        editor.commit();
         locked = false;
     }
 

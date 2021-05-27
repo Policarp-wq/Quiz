@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import static game.evgeha.logicalquiz.Activity_Main.coin_count;
 import static game.evgeha.logicalquiz.Activity_Main.right_sound;
 import static game.evgeha.logicalquiz.Activity_Main.wrong_sound;
 
@@ -29,6 +30,9 @@ public class Activity_CommonLevel extends Level {
                     updateQuestionUi(question.getText(), vars);
                     String fact = facts[stage], png_code = png_codes[stage];
                     btn_id = -1;
+                    if(hints[stage].equals("null") || coin_count - penalty < hint_cost) {
+                        disableHint();
+                    } else enableHint();
                     // Ставим таймер на 15 секунд
                     progress = 0;
                     for (; cur_time < TIME * 1000; ++cur_time) {
@@ -42,7 +46,7 @@ public class Activity_CommonLevel extends Level {
                         // Если какая-то кнопка нажата, то получаем её порядковый номер и сравнимаем ответ, принадлежащий данной кнопке с правильным
                         if (btn_id != -1) {
                             // Если ответ неправильный
-                            if (vars[btn_id] != question.getAns()) {
+                            if (!vars[btn_id].equals(question.getAns())) {
                                 playSound(wrong_sound);
                                 heartsCnt--;
                             } else{
