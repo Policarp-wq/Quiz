@@ -30,6 +30,7 @@ public class LevelInfo_adapter extends ArrayAdapter<LevelInfo> {
         if(levelInfo.isLocked() == true)
             ((ImageView) convertView.findViewById(R.id.status_image)).setImageResource(R.drawable.locked);
         else {
+            ((TextView) convertView.findViewById(R.id.cost_txt)).setText(R.string.Unlocked);
             ((TextView) convertView.findViewById(R.id.cost_txt)).setTextColor(ContextCompat.getColor(getContext(), R.color.green));
 
             ((ImageView) convertView.findViewById(R.id.status_image)).setImageResource(R.drawable.unlocked);

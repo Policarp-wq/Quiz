@@ -79,10 +79,10 @@
         <item>borobodur</item>
     </string-array>
     <string-array name="heritage_hints">
-        <item>Among</item>
+        <item>null</item>
+        <item>Она находится в западной части Азии</item>
         <item>null</item>
         <item>null</item>
-        <item>Sus</item>
         <item>null</item>
         <item>null</item>
         <item>null</item>

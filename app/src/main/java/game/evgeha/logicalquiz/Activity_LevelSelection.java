@@ -111,8 +111,9 @@ public class Activity_LevelSelection extends AppCompatActivity {
     public boolean[] getStatuses(String[] keys){
         spStatuses = getSharedPreferences("Locked_status", Context.MODE_PRIVATE);
         boolean[] status = new boolean[keys.length];
-        for(int i = 0; i < keys.length; ++i)
+        for(int i = 0; i < keys.length; ++i) {
             status[i] = spStatuses.getBoolean(keys[i], true);
+        }
         return status;
     }
     // Получаем массив рекордов пользователя
@@ -139,6 +140,10 @@ public class Activity_LevelSelection extends AppCompatActivity {
         }
         for(int i = 0; i < arr.length; i++){
             LevelInfo level = new LevelInfo(names[i], i * 8, locked[i], types[i], codes[i], records[i]);
+            if(i == 0) { // Первый уровень всегда открыт
+                SharedPreferences.Editor editorStatuses = spStatuses.edit();
+                level.setUnLocked(editorStatuses);
+            }
             arr[i] = level;
         }
         return arr;

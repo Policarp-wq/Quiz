@@ -31,7 +31,7 @@ public class Level extends AppCompatActivity {
     public String[] questions, facts, png_codes, hints;
 
     public int btn_id = -1, heartsCnt = 3, hint_cost, penalty = 0, time_progress, progress = 0,  pos, stage, end, right_ans_cnt = 0, record;
-    public final int TIME = 3; // Время на ответ
+    public final int TIME = 15; // Время на ответ
     public int cur_time = 0;
 
     public ImageView fact_png, end_png, hint_img;
@@ -316,6 +316,9 @@ public class Level extends AppCompatActivity {
             if(record == 0) {
                 txt = getResources().getString(R.string.Succ_end) + " " + Integer.toString(coins) + " " + getResources().getString(R.string.Money);
                 record = coins;
+            }
+            else if(record == (questions.length / 5) * pos){
+                txt = getResources().getString(R.string.Highest);
             }
             else if(record >= coins) {
                 coins = 0;
