@@ -1,16 +1,10 @@
 package game.evgeha.logicalquiz;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import static game.evgeha.logicalquiz.Activity_Main.coin_count;
 import static game.evgeha.logicalquiz.Activity_Main.right_sound;
@@ -24,7 +18,6 @@ public class Activity_GraphicLevel extends Level {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphic_level);
-        setFullScreen();
         intent = new Intent(Activity_GraphicLevel.this, Activity_LevelSelection.class);
         // Предустановка базовых элементов уровня
         question_img = (ImageView)findViewById(R.id.question_img);
@@ -44,11 +37,12 @@ public class Activity_GraphicLevel extends Level {
                     if(hints[stage].equals("null") || coin_count - penalty < hint_cost) {
                         disableHint();
                     } else enableHint();
-                    // Ставим таймер на 15 секунд
-                    progress = 0;
+                    updateProgressBar(stage);
+                    // Ставим таймер на TIME секунд
+                    time_progress = 0;
                     for (; cur_time < TIME * 1000; ++cur_time) {
-                        progress = cur_time / (TIME * 10);
-                        updateProgressBar();
+                        time_progress = cur_time / (TIME * 10);
+                        updateCurTime();
                         try {
                             this.sleep(1);
                         } catch (InterruptedException e) {

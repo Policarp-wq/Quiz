@@ -23,26 +23,28 @@ import static game.evgeha.logicalquiz.Activity_Main.soundPool;
 
 public class Level extends AppCompatActivity {
 
-    public Button ans1, ans2, ans3, ans4, btn_continue, btn_end_continue, btn_end_play_again; // Кнопки ответов, продолжить
-    public TextView question_txt, fact_txt, right_ans, end_txt, hint_txt; // Текст вопроса, факта и правильного ответа на экране
-    public ProgressBar countDown_timer; // Обратный отсчёт
+    public Button ans1, ans2, ans3, ans4, btn_continue, btn_end_continue, btn_end_play_again;
+    public TextView question_txt, fact_txt, right_ans, end_txt, hint_txt;
+    public ProgressBar countDown_timer, level_progress; // Обратный отсчёт
 
     public String code = "animals_", name, hint;
     public String[] questions, facts, png_codes, hints;
 
-    public int btn_id = -1, heartsCnt = 3, hint_cost, penalty = 0, progress, pos, stage, end, right_ans_cnt = 0, record;
-    public final int TIME = 20; // Время на ответ
+    public int btn_id = -1, heartsCnt = 3, hint_cost, penalty = 0, time_progress, progress = 0,  pos, stage, end, right_ans_cnt = 0, record;
+    public final int TIME = 3; // Время на ответ
     public int cur_time = 0;
 
     public ImageView fact_png, end_png, hint_img;
     public ImageView[] hearts = new ImageView[3]; // Сердечки на экране
 
-    public Dialog dialogFact, dialogHint, dialogEnd; // Диалоговые окна
+    public Dialog dialogFact, dialogHint, dialogEnd;
 
     public Intent intent;
 
-    private SharedPreferences spCnts, spRecords; // Кол-во монет пользователя
+    private SharedPreferences spCnts, spRecords;
 
+    public boolean stopped = false; // Если преждевременно выйти из уровня, таймер всё равно продолжит отсчёт,
+                                    // по окончании которого обновиться UI, которо нет и прилжение умрёт
     public void setFullScreen(){
         Window window = getWindow();
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -90,9 +92,9 @@ public class Level extends AppCompatActivity {
         btn_end_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 startActivity(intent);
                 playSound(click_sound);
-                finish();
             }
         });
         btn_end_play_again.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +120,7 @@ public class Level extends AppCompatActivity {
     public void playSound(int sound_id){
         soundPool.play(sound_id,1,1,0,0,1);
     }
-    // Получаем массив вопросов, фактов и картинок для данного уровня
+    // Получаем массивы, с которыми будем работать
     public void getArrays() throws Exception{
         questions = getResources().getStringArray(getResources().getIdentifier(code + "questions", "array", getPackageName()));
         facts = getResources().getStringArray(getResources().getIdentifier(code + "facts", "array", getPackageName()));
@@ -130,6 +132,7 @@ public class Level extends AppCompatActivity {
     }
     // Настройка уровня
     public void levelMainSetUp(Context context){
+        setFullScreen();
         ans1 = (Button) findViewById(R.id.ans1);
         ans2 = (Button) findViewById(R.id.ans2);
         ans3 = (Button) findViewById(R.id.ans3);
@@ -151,6 +154,7 @@ public class Level extends AppCompatActivity {
         hint_cost = pos;
 
         countDown_timer = (ProgressBar) findViewById(R.id.timer);
+        level_progress = (ProgressBar) findViewById(R.id.level_progress);
 
         createDialogFact(context);
         createDialogHint(context);
@@ -165,13 +169,21 @@ public class Level extends AppCompatActivity {
             btn_end_continue.setText("Вернуться в лобби");
             showDialogEnd(e.getMessage(), R.drawable.cross);
         }
+
+        level_progress.setMax(end);
     }
     // Обновить прогресс таймера на экране
-    public void updateProgressBar(){
-        countDown_timer.setProgress(progress);
+    public void updateCurTime(){
+        countDown_timer.setProgress(time_progress);
+    }
+    public void updateProgressBar(int progress){
+        level_progress.setProgress(progress);
+        level_progress.setSecondaryProgress(progress + 1);
     }
     // Обновить интерфейс всей активности
     public void updateQuestionUi(String question, String[] vars){
+        if(stopped)
+            return;
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -201,7 +213,6 @@ public class Level extends AppCompatActivity {
         fact_png = (ImageView) dialogFact.findViewById(R.id.fact_img);
         btn_continue = (Button) dialogFact.findViewById(R.id.question_continue);
     }
-    // Окно подсказки
     public void createDialogHint(Context context){
         dialogHint = new Dialog(context);
         dialogSetUp(dialogHint, R.layout.dialog_window_hint, true);
@@ -211,6 +222,8 @@ public class Level extends AppCompatActivity {
         dialogUpdateUi(hint);
     }
     public void disableHint(){
+        if(stopped)
+            return;
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -221,6 +234,8 @@ public class Level extends AppCompatActivity {
         runOnUiThread(runnable);
     }
     public void enableHint(){
+        if(stopped)
+            return;
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -230,7 +245,6 @@ public class Level extends AppCompatActivity {
         };
         runOnUiThread(runnable);
     }
-    // Показ окна
     public void showDialogFact(String ans, String txt, String png_code){
         int id = getResources().getIdentifier(png_code, "drawable", getPackageName());
         dialogUpdateUi(ans, txt, id);
@@ -238,6 +252,8 @@ public class Level extends AppCompatActivity {
     }
     // Обновить интерфейс окна
     public void dialogUpdateUi(String ans, String txt, int id){
+        if(stopped)
+            return;
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -250,6 +266,8 @@ public class Level extends AppCompatActivity {
         runOnUiThread(runnable);
     }
     public void dialogUpdateUi(String hint){
+        if(stopped)
+            return;
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -276,6 +294,8 @@ public class Level extends AppCompatActivity {
         btn_end_play_again = (Button)dialogEnd.findViewById(R.id.play_again);
     }
     public void showDialogEnd(String txt, int img_id){
+        if(stopped)
+            return;
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -325,5 +345,11 @@ public class Level extends AppCompatActivity {
         ed.putInt("Wrong_cnt", wrong_cnt);
         ed.commit();
         showDialogEnd(txt, id);
+    }
+
+    @Override
+    protected void onStop() {
+        stopped = true;
+        super.onStop();
     }
 }

@@ -32,24 +32,13 @@ public class Activity_LevelSelection extends AppCompatActivity {
     private ImageView coin_img;
     private SharedPreferences spStatuses, spCnt, spRecords;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_selection);
-        setFullScreen();
-        //Получаем монеты пользователя
-        spCnt = getSharedPreferences("Counts", Context.MODE_PRIVATE);
-        coin_count = spCnt.getInt("Coins", 0);
-
-        cnt = (TextView) findViewById(R.id.coin_cnt);
-        lvl_list = (ListView) findViewById(R.id.level_types);
-        coin_img = (ImageView)findViewById(R.id.coin) ;
-
-        cnt.setText(Integer.toString(coin_count));
+        selectionMainSetUp();
 
         LevelInfo[] levelInf = makeLevel(); // Создаём массив классов LevelInfo
-
         LevelInfo_adapter adapter = new LevelInfo_adapter(this, levelInf); //Создаём listView классов LevelInfo с помощью адаптера
         lvl_list.setAdapter(adapter);
 
@@ -95,6 +84,21 @@ public class Activity_LevelSelection extends AppCompatActivity {
         Window window = getWindow();
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
+    // Начальная настройка
+    public void selectionMainSetUp(){
+        setFullScreen();
+        //Получаем монеты пользователя
+        spCnt = getSharedPreferences("Counts", Context.MODE_PRIVATE);
+        coin_count = spCnt.getInt("Coins", 0);
+
+        cnt = (TextView) findViewById(R.id.coin_cnt);
+        lvl_list = (ListView) findViewById(R.id.level_types);
+        coin_img = (ImageView)findViewById(R.id.coin) ;
+
+        cnt.setText(Integer.toString(coin_count));
+
+    }
+    // Получаем массив названий уровней
     public String[] getNames(String[] codes){
         String[] arr = new String[codes.length];
         for(int i = 0; i < codes.length; ++i) {
@@ -119,21 +123,6 @@ public class Activity_LevelSelection extends AppCompatActivity {
             records[i] = spRecords.getInt(keys[i], 0);
         return records;
     }
-    /*private LevelInfo[] makeLevel(){
-        String[] names = getResources().getStringArray(R.array.level_name);
-        String[] types = getResources().getStringArray(R.array.level_types);
-        String[] codes = getResources().getStringArray(R.array.level_codes);
-        boolean[] locked = getStatuses(names);
-        int[] costs = getResources().getIntArray(R.array.сosts);
-        int[] records = getRecords(names);
-        //clearCache(names);
-        LevelInfo[] arr = new LevelInfo[names.length];
-        for(int i = 0; i < arr.length; i++){
-            LevelInfo level = new LevelInfo(names[i], costs[i], locked[i], types[i], codes[i], records[i]);
-            arr[i] = level;
-        }
-        return arr;
-    }*/
     // Наполнение listView с помощью адаптера
     public LevelInfo[] makeLevel(){
         String[] codes = getResources().getStringArray(R.array.level_codes);
@@ -154,7 +143,6 @@ public class Activity_LevelSelection extends AppCompatActivity {
         }
         return arr;
     }
-
     public void playSound(int id){
         soundPool.play(id,1,1,0,0,1);
     }
@@ -198,11 +186,16 @@ public class Activity_LevelSelection extends AppCompatActivity {
         });
         dialog.show();
     }
-
     // Диалоговое окно с описанием уровня
     public void showDialogDescription(String type, Intent intent){
         dialog = new Dialog(Activity_LevelSelection.this);
-        dialogSetUp(dialog, R.layout.dialog_window_about_common_level, true);
+        dialogSetUp(dialog, R.layout.dialog_window_about_level, true);
+        TextView description = (TextView)dialog.findViewById(R.id.level_description);
+        switch(type){
+            case LevelInfo.TYPE_GRAPHIC: description.setText(R.string.Graphic_level_description);
+                break;
+            default: description.setText(R.string.Common_level_description);
+        }
         Button btn_start_level = (Button)dialog.findViewById(R.id.start_level);
         btn_start_level.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,7 +207,7 @@ public class Activity_LevelSelection extends AppCompatActivity {
         });
         dialog.show();
     }
-
+    // Диалоговое окно с предупреждением
     public void showDialogWarn(){
         dialog = new Dialog(Activity_LevelSelection.this);
         dialogSetUp(dialog, R.layout.dialog_window_warn, true);
@@ -228,14 +221,12 @@ public class Activity_LevelSelection extends AppCompatActivity {
         });
         dialog.show();
     }
-
     // SetUp диалогового окна
     public void dialogSetUp(Dialog dialog, int id, boolean cancelable){
         dialog.setContentView(id); // Что будет показывать диалоговое окно
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Сделаем задний фон прозрачным
         dialog.setCancelable(cancelable); // Окно можно закрыть только выбрав какой-либо вариант
     }
-
     // Очищение кеша
     public void clearCache(String[] keys){
         spStatuses = getSharedPreferences("Locked_status", Context.MODE_PRIVATE);
